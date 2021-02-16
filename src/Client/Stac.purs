@@ -1,4 +1,4 @@
-module Client.Stac where
+module Client.Stac (getCollections) where
 
 import Affjax (Error(..), defaultRequest)
 import Affjax as AX
@@ -17,6 +17,7 @@ adaptError jsErr =
     ( "Request failed to produce a meaningful response: " <> printJsonDecodeError jsErr
     )
 
+-- | Fetch the `/collections` route from a STAC API.
 getCollections :: String -> Effect (Promise (Either Error CollectionsResponse))
 getCollections apiHost =
   fromAff
