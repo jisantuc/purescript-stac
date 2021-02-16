@@ -10,6 +10,9 @@ import Model.Link (StacLink)
 import Prelude (class Eq, class Monoid, class Semigroup, class Show, bind, pure, ($), (<>))
 import Test.QuickCheck (class Arbitrary)
 
+-- | A `CollectionsResponse` models the format of responses from the
+-- | [`/collections`](https://github.com/radiantearth/stac-api-spec/blob/v1.0.0-beta.1/ogcapi-features/openapi.yaml#L93-L106) route
+-- | required of STAC APIs.
 newtype CollectionsResponse
   = CollectionsResponse
   { collections :: Array StacCollection

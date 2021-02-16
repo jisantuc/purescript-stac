@@ -22,6 +22,12 @@ import Model.Testing (jsObjectGen)
 import Prelude (class Eq, class Show, apply, bind, map, not, pure, ($), (<$>), (<<<))
 import Test.QuickCheck (class Arbitrary, arbitrary)
 
+-- | Links from one STAC entity to somewhere else.
+-- | "Somewhere else" can be another STAC entity, for example,
+-- | a collection linking to a child catalog or an item, or to
+-- | somewhere else entirely, for example an item could link
+-- | to a specially formatted metadata file.
+-- | See the [STAC specification](https://github.com/radiantearth/stac-spec/blob/v1.0.0-beta.2/catalog-spec/catalog-spec.md#link-object)
 newtype StacLink
   = StacLink
   { href :: String
@@ -36,9 +42,6 @@ derive newtype instance eqStacLink :: Eq StacLink
 instance showStacLink :: Show StacLink where
   show = stringify <<< encodeJson
 
--- what's going wrong here?
--- map decoder expects an array of k v pairs, while I'm encoding as top-level json properties
--- what an adventure! i'll need to write a custom decoding function here
 instance decodeStacLink :: DecodeJson StacLink where
   decodeJson js = case toObject js of
     Just obj ->

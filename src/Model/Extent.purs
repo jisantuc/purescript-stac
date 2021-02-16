@@ -10,8 +10,9 @@ import Model.JsonDate (JsonDate)
 import Prelude (class Eq, class Show, bind, pure, show, ($), (+), (<$>), (>>=))
 import Test.QuickCheck (class Arbitrary, arbitrary)
 
--- predicate requiring at least one non-Nothing item in a list of two items
--- implies SizeEqualTo D2, but I don't know how to tell the compiler that
+-- | Predicate requiring at least one non-Nothing item in a list of two items.
+-- | The implementation implies SizeEqualTo D2 but I don't know how to express
+-- | that predicate as a dependency.
 data OneOrBoth a
 
 instance predicateOneOrBoth :: Predicate (OneOrBoth p) (Array (Maybe x)) where
@@ -20,6 +21,7 @@ instance predicateOneOrBoth :: Predicate (OneOrBoth p) (Array (Maybe x)) where
     [ _, Just _ ] -> Right arr
     _ -> Left NotError
 
+-- | A TwoDimBbox represents a bounding box in two dimensions.
 newtype TwoDimBbox
   = TwoDimBbox
   { llx :: Number
@@ -54,11 +56,14 @@ instance arbitraryTwoDimBbox :: Arbitrary TwoDimBbox where
       ury = lly + 5.0
     pure $ TwoDimBbox { llx, lly, urx, ury }
 
+-- | A `SpatialExtent` represents the collection of two dimensional bboxes covered
+-- | by a collection.
 type SpatialExtent
   = { bbox :: Array TwoDimBbox
     }
 
--- TODO: handwrite json and arbitrary instances, derive eq and show
+-- | A `TemporalExtent` represents the time span covered by a `StacCollection`.
+-- | It can be open on no more than one side.
 newtype TemporalExtent
   = TemporalExtent (Refined (OneOrBoth JsonDate) (Array (Maybe JsonDate)))
 
@@ -89,16 +94,15 @@ instance arbitraryTemporalExtent :: Arbitrary TemporalExtent where
       end <- Just <$> arbitrary
       pure $ TemporalExtent (unsafeRefine [ start, end ])
 
+-- | An `Interval` represents the collection of time spans covered by
+-- | a `StacCollection`.
 type Interval
   = { interval :: Array TemporalExtent
     }
 
+-- | A `StacExtent` represents the combined time and geographic extents
+-- | covered by a `StacCollection`.
 type StacExtent
   = { spatial :: SpatialExtent
     , temporal :: Interval
-    }
-
-type Foo
-  = { x :: Int
-    , y :: Int
     }

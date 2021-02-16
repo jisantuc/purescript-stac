@@ -16,6 +16,9 @@ import Prelude (class Eq, class Show, bind, not, pure, ($), (<$>), (<<<))
 import Test.QuickCheck (class Arbitrary, arbitrary)
 import Test.QuickCheck.Gen (Gen, arrayOf)
 
+-- | A `StacCollection` represents a logical grouping of items and other
+-- | collections / and catalogs that shares some metadata, namely, temporal
+-- | and geographic extents and upstream providers. 
 newtype StacCollection
   = StacCollection
   { stacVersion :: String
