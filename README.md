@@ -1,6 +1,7 @@
 # STAC
 
-[![Release](http://img.shields.io/github/release/purescript-contrib/purescript-argonaut.svg)](https://github.com/purescript-contrib/purescript-argonaut/releases)
+[![CI](https://github.com/jisantuc/purescript-stac/workflows/ci/badge.svg?branch=main)](https://github.com/jisantuc/purescript-stac/actions?query=workflow%3Aci+branch%3Amain)
+[![Release](http://img.shields.io/github/release/jisantuc/purescript-stac.svg)](https://github.com/jisantuc/purescript-stac/releases)
 [![Maintainer: jisantuc](https://img.shields.io/badge/maintainer-jisantuc-teal.svg)](http://github.com/jisantuc)
 
 [STAC](github.com/jisantuc/purescript-stac) is a PureScript library for modeling [SpatioTemporal Asset Catalogs](https://stacspec.org/) (STACs) in PureScript.
