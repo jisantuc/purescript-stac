@@ -25,7 +25,7 @@ The main entrypoint for the STAC module is `Data.Stac`:
 
 `Data.Stac` re-exports data defined in the `Client` and `Model` modules. The `Model` module includes types for constructing valid STAC JSON objects. The `Client` module includes methods for querying [STAC APIs](https://github.com/radiantearth/stac-api-spec).
 
-Check out the [Client QuickStart](./src/Client/README.md#quick-start) and [Model QuickStart](./src/Model/README.md#quick-start) for more information.
+Check out the [Client Quick Start](./src/Client/README.md#quick-start) and [Model Quick Start](./src/Model/README.md#quick-start) for more information.
 
 ## Documentation
 
