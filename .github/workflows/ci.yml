@@ -1,0 +1,19 @@
+name: ci
+
+on:
+  pull_request:
+    branches:
+      - "purescript-http"
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up a PureScript toolchain
+        uses: purescript-contrib/setup-purescript@v1.1
+      - run: |
+          spago build
+          spago test
