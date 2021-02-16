@@ -4,7 +4,7 @@
 [![Release](http://img.shields.io/github/release/jisantuc/purescript-stac.svg)](https://github.com/jisantuc/purescript-stac/releases)
 [![Maintainer: jisantuc](https://img.shields.io/badge/maintainer-jisantuc-teal.svg)](http://github.com/jisantuc)
 
-[STAC](github.com/jisantuc/purescript-stac) is a PureScript library for modeling [SpatioTemporal Asset Catalogs](https://stacspec.org/) (STACs) in PureScript.
+[STAC](https://github.com/jisantuc/purescript-stac) is a PureScript library for modeling [SpatioTemporal Asset Catalogs](https://stacspec.org/) (STACs) in PureScript.
 
 ## Installation
 
