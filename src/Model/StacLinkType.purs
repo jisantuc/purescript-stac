@@ -1,6 +1,12 @@
 module Model.StacLinkType where
 
-import Data.Argonaut (class DecodeJson, class EncodeJson, JsonDecodeError(..), encodeJson, toString)
+import Data.Argonaut
+  ( class DecodeJson
+  , class EncodeJson
+  , JsonDecodeError(..)
+  , encodeJson
+  , toString
+  )
 import Data.Array.NonEmpty (cons', toNonEmpty)
 import Data.Either (Either(..))
 import Data.Generic.Rep (class Generic)
@@ -10,6 +16,12 @@ import Prelude (class Eq, class Show, pure, ($), (<$>), (<<<))
 import Test.QuickCheck (class Arbitrary, arbitrary)
 import Test.QuickCheck.Gen (oneOf)
 
+-- | STAC link types model many possible STAC link types based on the
+-- | Some link relation types are explicitly mentioned in the
+-- | [STAC specification](https://github.com/radiantearth/stac-spec/blob/v1.0.0-beta.2/catalog-spec/catalog-spec.md#relation-types),
+-- | but a more complete list of suggestions can be found in
+-- | [IANA link relations](https://www.iana.org/assignments/link-relations/link-relations.xhtml).
+-- | Link types that do not have a specific constructor will be parsed as `VendorLinkType linkTypeString`.
 data StacLinkType
   = Self
   | StacRoot

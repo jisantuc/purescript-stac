@@ -9,6 +9,8 @@ import Prelude (class Eq, class Show, show, ($), (<$>), (<<<))
 import Test.QuickCheck (class Arbitrary)
 import Test.QuickCheck.Gen (elements)
 
+-- | A `ProviderRole` indicates what a provider was responsible for in
+-- | the provenance of some data.
 data StacProviderRole
   = Licensor
   | Producer
@@ -48,6 +50,9 @@ instance arbitraryStacProviderRole :: Arbitrary StacProviderRole where
                 ]
           )
 
+-- | A `StacProvider` indicates the name and responsibilities of entities
+-- | responsible for some piece of the data's provenance. More information
+-- | can be found in the [STAC specification](https://github.com/radiantearth/stac-spec/blob/v1.0.0-beta.2/item-spec/common-metadata.md#provider-object).
 type StacProvider
   = { name :: String
     , description :: Maybe String
