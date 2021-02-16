@@ -1,0 +1,29 @@
+{
+    "name": "purescript-stac",
+    "license": [
+        "MIT"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jisantuc/purescript-stac.git"
+    },
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "output"
+    ],
+    "dependencies": {
+        "purescript-aff-promise": "^v2.1.0",
+        "purescript-affjax": "^v11.0.0",
+        "purescript-argonaut": "^v7.0.0",
+        "purescript-console": "^v4.4.0",
+        "purescript-datetime": "^v4.1.1",
+        "purescript-effect": "^v2.0.1",
+        "purescript-formatters": "^v4.0.1",
+        "purescript-psci-support": "^v4.0.0",
+        "purescript-quickcheck": "^v6.1.0",
+        "purescript-refined": "^v1.0.0",
+        "purescript-test-unit": "^v15.0.0"
+    }
+}
