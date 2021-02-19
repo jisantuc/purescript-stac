@@ -39,7 +39,7 @@ data StacLinkType
   | ServiceDesc
   | ServiceDoc
   | Conformance
-  | Data
+  | DataLink
   | LatestVersion
   | PredecessorVersion
   | SuccessorVersion
@@ -71,7 +71,7 @@ instance decodeStacLinkType :: DecodeJson StacLinkType where
     Just "service-desc" -> Right ServiceDesc
     Just "service-doc" -> Right ServiceDoc
     Just "conformance" -> Right Conformance
-    Just "data" -> Right Data
+    Just "data" -> Right DataLink
     Just "latest-version" -> Right LatestVersion
     Just "predecessor-version" -> Right PredecessorVersion
     Just "successor-version" -> Right SuccessorVersion
@@ -99,7 +99,7 @@ instance encodeStacLinkType :: EncodeJson StacLinkType where
           ServiceDesc -> "service-desc"
           ServiceDoc -> "service-doc"
           Conformance -> "conformance"
-          Data -> "data"
+          DataLink -> "data"
           LatestVersion -> "latest-version"
           PredecessorVersion -> "predecessor-version"
           SuccessorVersion -> "successor-version"
@@ -129,7 +129,7 @@ instance arbitraryStacLinkType :: Arbitrary StacLinkType where
                   , ServiceDesc
                   , ServiceDoc
                   , Conformance
-                  , Data
+                  , DataLink
                   , LatestVersion
                   , PredecessorVersion
                   , SuccessorVersion

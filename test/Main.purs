@@ -1,6 +1,5 @@
 module Test.Main where
 
-import Prelude (class Eq, class Show, Unit, discard, show, ($), (<$>), (<*>), (<>), (==))
 import Data.Argonaut (class DecodeJson, class EncodeJson, decodeJson, encodeJson)
 import Data.Date (Month(..))
 import Data.DateTime (DateTime(..), Time(..), canonicalDate)
@@ -8,9 +7,11 @@ import Data.Either (Either(..))
 import Data.Enum (toEnum)
 import Data.Maybe (Maybe(..))
 import Data.Stac
-  ( CollectionsResponse
+  ( AssetRole
+  , CollectionsResponse
   , Interval
   , JsonDate(..)
+  , MediaType
   , SpatialExtent
   , StacCollection
   , StacExtent
@@ -23,6 +24,7 @@ import Data.Stac
   )
 import Effect (Effect)
 import Effect.Class (liftEffect)
+import Prelude (class Eq, class Show, Unit, discard, show, ($), (<$>), (<*>), (<>), (==))
 import Test.QuickCheck (Result, quickCheck, (<?>))
 import Test.Unit (suite, test)
 import Test.Unit.Main (runTest)
@@ -43,6 +45,8 @@ main = do
       test "StacLink" $ liftEffect $ quickCheck (\(x :: StacLink) -> codecRoundTrip x)
       test "StacCollection" $ liftEffect $ quickCheck (\(x :: StacCollection) -> codecRoundTrip x)
       test "StacCollectionResponse" $ liftEffect $ quickCheck (\(x :: CollectionsResponse) -> codecRoundTrip x)
+      test "MediaType" $ liftEffect $ quickCheck (\(x :: MediaType) -> codecRoundTrip x)
+      test "AssetRole" $ liftEffect $ quickCheck (\(x :: AssetRole) -> codecRoundTrip x)
 
 dateTime :: Maybe JsonDate
 dateTime =
