@@ -8,19 +8,19 @@ import Data.Foldable (elem)
 import Data.Maybe (Maybe(..))
 import Data.Set as Set
 import Foreign.Object (Object, filterKeys)
-import Model.Extent (StacExtent)
-import Model.Link (StacLink)
-import Model.Provider (StacProvider)
+import Model.Extent (Extent)
+import Model.Link (Link)
+import Model.Provider (Provider)
 import Model.Testing (alphaStringGen, jsObjectGen, maybe)
 import Prelude (class Eq, class Show, bind, not, pure, ($), (<$>), (<<<))
 import Test.QuickCheck (class Arbitrary, arbitrary)
 import Test.QuickCheck.Gen (Gen, arrayOf)
 
--- | A `StacCollection` represents a logical grouping of items and other
+-- | A `Collection` represents a logical grouping of items and other
 -- | collections / and catalogs that shares some metadata, namely, temporal
 -- | and geographic extents and upstream providers. 
-newtype StacCollection
-  = StacCollection
+newtype Collection
+  = Collection
   { stacVersion :: String
   , stacExtensions :: Array String
   , id :: String
@@ -28,15 +28,15 @@ newtype StacCollection
   , description :: String
   , keywords :: Array String
   , license :: String
-  , providers :: Array StacProvider
-  , extent :: StacExtent
+  , providers :: Array Provider
+  , extent :: Extent
   , summaries :: Json
   , properties :: Json
-  , links :: Array StacLink
+  , links :: Array Link
   , extensionFields :: Object Json
   }
 
-instance decodeJsonStacCollection :: DecodeJson StacCollection where
+instance decodeJsonStacCollection :: DecodeJson Collection where
   decodeJson js =
     let
       fields =
@@ -71,7 +71,7 @@ instance decodeJsonStacCollection :: DecodeJson StacCollection where
           links <- jsObject .: "links"
           extensionFields <- filterKeys (\key -> not $ elem key fields) <$> decodeJson js
           pure
-            $ StacCollection
+            $ Collection
                 { stacVersion
                 , stacExtensions
                 , id
@@ -88,8 +88,8 @@ instance decodeJsonStacCollection :: DecodeJson StacCollection where
                 }
         Nothing -> Left $ UnexpectedValue js
 
-instance encodeJsonStacCollection :: EncodeJson StacCollection where
-  encodeJson ( StacCollection
+instance encodeJsonStacCollection :: EncodeJson Collection where
+  encodeJson ( Collection
       { stacVersion
     , stacExtensions
     , id
@@ -130,7 +130,7 @@ instance encodeJsonStacCollection :: EncodeJson StacCollection where
       := links
       ~> encodeJson extensionFields
 
-instance arbitraryStacCollection :: Arbitrary StacCollection where
+instance arbitraryStacCollection :: Arbitrary Collection where
   arbitrary = do
     stacVersion <- pure $ "1.0.0-beta.2"
     stacExtensions <- pure $ []
@@ -140,13 +140,13 @@ instance arbitraryStacCollection :: Arbitrary StacCollection where
     keywords <- arrayOf (alphaStringGen 12)
     license <- alphaStringGen 12
     providers <- arrayOf arbitrary
-    extent <- (arbitrary :: Gen StacExtent)
+    extent <- (arbitrary :: Gen Extent)
     summaries <- encodeJson <$> jsObjectGen
     properties <- encodeJson <$> jsObjectGen
     links <- arrayOf arbitrary
     extensionFields <- jsObjectGen
     pure
-      $ StacCollection
+      $ Collection
           { stacVersion
           , stacExtensions
           , id
@@ -162,7 +162,7 @@ instance arbitraryStacCollection :: Arbitrary StacCollection where
           , extensionFields
           }
 
-derive newtype instance eqStacCollection :: Eq StacCollection
+derive newtype instance eqStacCollection :: Eq Collection
 
-instance showStacCollection :: Show StacCollection where
+instance showStacCollection :: Show Collection where
   show = stringify <<< encodeJson

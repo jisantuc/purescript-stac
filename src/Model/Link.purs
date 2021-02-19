@@ -17,7 +17,7 @@ import Data.Foldable (elem)
 import Data.Maybe (Maybe(..))
 import Data.Set as Set
 import Foreign.Object (Object, filterKeys)
-import Model.StacLinkType (StacLinkType)
+import Model.LinkType (LinkType)
 import Model.Testing (jsObjectGen)
 import Prelude (class Eq, class Show, apply, bind, map, not, pure, ($), (<$>), (<<<))
 import Test.QuickCheck (class Arbitrary, arbitrary)
@@ -28,21 +28,21 @@ import Test.QuickCheck (class Arbitrary, arbitrary)
 -- | somewhere else entirely, for example an item could link
 -- | to a specially formatted metadata file.
 -- | See the [STAC specification](https://github.com/radiantearth/stac-spec/blob/v1.0.0-beta.2/catalog-spec/catalog-spec.md#link-object)
-newtype StacLink
-  = StacLink
+newtype Link
+  = Link
   { href :: String
-  , rel :: StacLinkType
+  , rel :: LinkType
   , _type :: Maybe String
   , title :: Maybe String
   , extensionFields :: Object Json
   }
 
-derive newtype instance eqStacLink :: Eq StacLink
+derive newtype instance eqStacLink :: Eq Link
 
-instance showStacLink :: Show StacLink where
+instance showStacLink :: Show Link where
   show = stringify <<< encodeJson
 
-instance decodeStacLink :: DecodeJson StacLink where
+instance decodeStacLink :: DecodeJson Link where
   decodeJson js = case toObject js of
     Just obj ->
       let
@@ -54,11 +54,11 @@ instance decodeStacLink :: DecodeJson StacLink where
           _type <- obj .: "type"
           title <- obj .: "title"
           extensionFields <- filterKeys (\key -> not $ elem key fields) <$> decodeJson js
-          pure $ StacLink { href, rel, _type, title, extensionFields }
+          pure $ Link { href, rel, _type, title, extensionFields }
     Nothing -> Left $ TypeMismatch "Expected a JSON object"
 
-instance encodeJsonStacLink :: EncodeJson StacLink where
-  encodeJson (StacLink { href, rel, _type, title, extensionFields }) =
+instance encodeJsonStacLink :: EncodeJson Link where
+  encodeJson (Link { href, rel, _type, title, extensionFields }) =
     "href" := href
       ~> "rel"
       := rel
@@ -68,11 +68,11 @@ instance encodeJsonStacLink :: EncodeJson StacLink where
       := title
       ~> encodeJson extensionFields
 
-instance arbitraryStacLink :: Arbitrary StacLink where
+instance arbitraryStacLink :: Arbitrary Link where
   arbitrary = ado
     href <- arbitrary
     rel <- arbitrary
     _type <- arbitrary
     title <- arbitrary
     extensionFields <- jsObjectGen
-    in StacLink { href, rel, _type, title, extensionFields }
+    in Link { href, rel, _type, title, extensionFields }

@@ -1,4 +1,4 @@
-module Model.StacLinkType where
+module Model.LinkType where
 
 import Data.Argonaut
   ( class DecodeJson
@@ -22,7 +22,7 @@ import Test.QuickCheck.Gen (oneOf)
 -- | but a more complete list of suggestions can be found in
 -- | [IANA link relations](https://www.iana.org/assignments/link-relations/link-relations.xhtml).
 -- | Link types that do not have a specific constructor will be parsed as `VendorLinkType linkTypeString`.
-data StacLinkType
+data LinkType
   = Self
   | StacRoot
   | Parent
@@ -30,7 +30,7 @@ data StacLinkType
   | Item
   | Items
   | Source
-  | Collection
+  | CollectionLink
   | License
   | Alternate
   | DescribedBy
@@ -46,14 +46,14 @@ data StacLinkType
   | DerivedFrom
   | VendorLinkType String
 
-derive instance eqStacLinkType :: Eq StacLinkType
+derive instance eqLinkType :: Eq LinkType
 
-derive instance genericStacLinkType :: Generic StacLinkType _
+derive instance genericLinkType :: Generic LinkType _
 
-instance showStacLinkType :: Show StacLinkType where
+instance showLinkType :: Show LinkType where
   show = genericShow
 
-instance decodeStacLinkType :: DecodeJson StacLinkType where
+instance decodeLinkType :: DecodeJson LinkType where
   decodeJson js = case toString js of
     Just "self" -> Right Self
     Just "root" -> Right StacRoot
@@ -62,7 +62,7 @@ instance decodeStacLinkType :: DecodeJson StacLinkType where
     Just "item" -> Right Item
     Just "items" -> Right Items
     Just "source" -> Right Source
-    Just "collection" -> Right Collection
+    Just "collection" -> Right CollectionLink
     Just "license" -> Right License
     Just "alternate" -> Right Alternate
     Just "describedBy" -> Right DescribedBy
@@ -79,10 +79,10 @@ instance decodeStacLinkType :: DecodeJson StacLinkType where
     Just s -> (Right <<< VendorLinkType) s
     Nothing -> (Left <<< UnexpectedValue) js
 
-instance encodeStacLinkType :: EncodeJson StacLinkType where
-  encodeJson stacLinkType =
+instance encodeLinkType :: EncodeJson LinkType where
+  encodeJson linkType =
     encodeJson
-      $ case stacLinkType of
+      $ case linkType of
           Self -> "self"
           StacRoot -> "root"
           Parent -> "parent"
@@ -90,7 +90,7 @@ instance encodeStacLinkType :: EncodeJson StacLinkType where
           Item -> "item"
           Items -> "items"
           Source -> "source"
-          Collection -> "collection"
+          CollectionLink -> "collection"
           License -> "license"
           Alternate -> "alternate"
           DescribedBy -> "describedBy"
@@ -106,7 +106,7 @@ instance encodeStacLinkType :: EncodeJson StacLinkType where
           DerivedFrom -> "derived-from"
           VendorLinkType s -> s
 
-instance arbitraryStacLinkType :: Arbitrary StacLinkType where
+instance arbitraryLinkType :: Arbitrary LinkType where
   arbitrary =
     oneOf
       $ toNonEmpty
@@ -120,7 +120,7 @@ instance arbitraryStacLinkType :: Arbitrary StacLinkType where
                   , Item
                   , Items
                   , Source
-                  , Collection
+                  , CollectionLink
                   , License
                   , Alternate
                   , DescribedBy
