@@ -7,7 +7,8 @@ import Data.Either (Either(..))
 import Data.Generic.Rep (class Generic)
 import Data.Generic.Rep.Show (genericShow)
 import Data.Maybe (Maybe(..))
-import Prelude (class Eq, class Show, pure, ($), (<$>))
+import Model.Testing (alphaStringGen)
+import Prelude (class Eq, class Ord, class Show, pure, ($), (<$>))
 import Test.QuickCheck (class Arbitrary, arbitrary)
 
 data AssetRole
@@ -18,6 +19,8 @@ data AssetRole
   | VendorAssetRole String
 
 derive instance eqAssetRole :: Eq AssetRole
+
+derive instance ordAssetRole :: Ord AssetRole
 
 derive instance genericAssetRole :: Generic AssetRole _
 
@@ -44,7 +47,7 @@ instance encodeJsonAssetRole :: EncodeJson AssetRole where
 instance arbitraryAssetRole :: Arbitrary AssetRole where
   arbitrary =
     oneOf $ toNonEmpty
-      $ (VendorAssetRole <$> arbitrary)
+      $ (VendorAssetRole <$> alphaStringGen 10)
           `cons'`
             ( pure
                 <$> [ Thumbnail

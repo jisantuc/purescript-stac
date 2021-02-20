@@ -15,6 +15,7 @@ import Data.Stac
   , SpatialExtent
   , Collection
   , Extent
+  , ItemAsset
   , Link
   , LinkType
   , Provider
@@ -47,6 +48,7 @@ main = do
       test "CollectionResponse" $ liftEffect $ quickCheck (\(x :: CollectionsResponse) -> codecRoundTrip x)
       test "MediaType" $ liftEffect $ quickCheck (\(x :: MediaType) -> codecRoundTrip x)
       test "AssetRole" $ liftEffect $ quickCheck (\(x :: AssetRole) -> codecRoundTrip x)
+      test "ItemAsset" $ liftEffect $ quickCheck (\(x :: ItemAsset) -> codecRoundTrip x)
 
 dateTime :: Maybe JsonDate
 dateTime =

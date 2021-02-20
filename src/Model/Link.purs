@@ -1,15 +1,6 @@
 module Model.Link where
 
-import Data.Argonaut
-  ( class DecodeJson
-  , class EncodeJson
-  , Json
-  , JsonDecodeError(..)
-  , decodeJson
-  , encodeJson
-  , stringify
-  , toObject
-  )
+import Data.Argonaut (class DecodeJson, class EncodeJson, Json, JsonDecodeError(..), decodeJson, encodeJson, stringify, toObject)
 import Data.Argonaut.Decode ((.:))
 import Data.Argonaut.Encode ((:=), (~>))
 import Data.Either (Either(..))
@@ -18,8 +9,9 @@ import Data.Maybe (Maybe(..))
 import Data.Set as Set
 import Foreign.Object (Object, filterKeys)
 import Model.LinkType (LinkType)
+import Model.MediaType (MediaType)
 import Model.Testing (jsObjectGen)
-import Prelude (class Eq, class Show, apply, bind, map, not, pure, ($), (<$>), (<<<))
+import Prelude (class Eq, class Show, apply, map, not, ($), (<$>), (<<<))
 import Test.QuickCheck (class Arbitrary, arbitrary)
 
 -- | Links from one STAC entity to somewhere else.
@@ -32,7 +24,7 @@ newtype Link
   = Link
   { href :: String
   , rel :: LinkType
-  , _type :: Maybe String
+  , _type :: Maybe MediaType
   , title :: Maybe String
   , extensionFields :: Object Json
   }
@@ -48,13 +40,13 @@ instance decodeStacLink :: DecodeJson Link where
       let
         fields = Set.fromFoldable [ "href", "rel", "type", "title" ]
       in
-        do
+        ado
           href <- obj .: "href"
           rel <- obj .: "rel"
           _type <- obj .: "type"
           title <- obj .: "title"
           extensionFields <- filterKeys (\key -> not $ elem key fields) <$> decodeJson js
-          pure $ Link { href, rel, _type, title, extensionFields }
+          in Link { href, rel, _type, title, extensionFields }
     Nothing -> Left $ TypeMismatch "Expected a JSON object"
 
 instance encodeJsonStacLink :: EncodeJson Link where
