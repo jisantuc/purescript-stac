@@ -5,7 +5,6 @@ import Data.Argonaut (class DecodeJson, class EncodeJson, decodeJson, encodeJson
 import Data.Date (Month(..))
 import Data.DateTime (DateTime(..), Time(..), canonicalDate)
 import Data.Either (Either(..))
-import Data.Either as Either
 import Data.Enum (toEnum)
 import Data.Maybe (Maybe(..))
 import Data.Stac
@@ -19,14 +18,13 @@ import Data.Stac
   , StacLinkType
   , StacProvider
   , StacProviderRole
-  , TemporalExtent(..)
+  , TemporalExtent
   , TwoDimBbox
   )
 import Effect (Effect)
 import Effect.Class (liftEffect)
 import Test.QuickCheck (Result, quickCheck, (<?>))
 import Test.Unit (suite, test)
-import Test.Unit.Assert as Assert
 import Test.Unit.Main (runTest)
 
 main :: Effect Unit
