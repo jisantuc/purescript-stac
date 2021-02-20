@@ -13,8 +13,8 @@ You can edit this file as you like.
   , "formatters"
   , "psci-support"
   , "quickcheck"
-  , "refined"
   , "test-unit"
+  , "these"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]
