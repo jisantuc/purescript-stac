@@ -18,7 +18,8 @@ import Test.QuickCheck.Gen (Gen, arrayOf)
 
 -- | A `Collection` represents a logical grouping of items and other
 -- | collections / and catalogs that shares some metadata, namely, temporal
--- | and geographic extents and upstream providers. 
+-- | and geographic extents and upstream providers.
+-- | You can see more in the [STAC specification](https://github.com/radiantearth/stac-spec/blob/v1.0.0-beta.2/collection-spec/collection-spec.md).
 newtype Collection
   = Collection
   { stacVersion :: String

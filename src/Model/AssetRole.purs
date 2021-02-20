@@ -9,8 +9,14 @@ import Data.Generic.Rep.Show (genericShow)
 import Data.Maybe (Maybe(..))
 import Model.Testing (alphaStringGen)
 import Prelude (class Eq, class Ord, class Show, pure, ($), (<$>))
-import Test.QuickCheck (class Arbitrary, arbitrary)
+import Test.QuickCheck (class Arbitrary)
 
+-- | An asset role indicates what purpose an item's asset serves.
+-- | For instance, an item could have several GeoTiff assets, where
+-- | one is the item's data and another is significantly downsampled
+-- | copy of the data for use as a thumbnail / preview.
+-- | You can see more about asset roles in the
+-- | [STAC specification](https://github.com/radiantearth/stac-spec/blob/v1.0.0-beta.2/item-spec/item-spec.md#asset-role-types).
 data AssetRole
   = Thumbnail
   | Overview

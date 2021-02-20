@@ -16,6 +16,11 @@ import Prelude (class Eq, class Show, apply, map, not, ($), (<$>), (<<<))
 import Test.QuickCheck (class Arbitrary, arbitrary)
 import Test.QuickCheck.Gen (listOf)
 
+-- | An asset represents some external file that provides data for this item.
+-- | Some examples of assets are a COG that holds the item's data and a
+-- | GeoJSON collection of labels for a label item.
+-- | You can see more in the
+-- | [STAC specification](https://github.com/radiantearth/stac-spec/blob/v1.0.0-beta.2/item-spec/item-spec.md#asset-object).
 newtype ItemAsset
   = ItemAsset
   { href :: String

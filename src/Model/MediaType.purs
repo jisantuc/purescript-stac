@@ -10,6 +10,11 @@ import Data.Maybe (Maybe(..))
 import Prelude (class Eq, class Show, pure, ($), (<$>))
 import Test.QuickCheck (class Arbitrary, arbitrary)
 
+-- | Media types tell clients what to expect when they request data
+-- | from a link. This type supports some special geo-specific
+-- | media types that aren't covered by the existing
+-- | [PureScript library](https://pursuit.purescript.org/packages/purescript-media-types/4.0.1/docs/Data.MediaType#t:MediaType)
+-- | and adds JSON codecs.
 data MediaType
   = GeoTiff
   | COG
