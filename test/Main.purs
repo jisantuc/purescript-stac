@@ -8,19 +8,19 @@ import Data.Enum (toEnum)
 import Data.Maybe (Maybe(..))
 import Data.Stac
   ( AssetRole
-  , CollectionsResponse
-  , Interval
-  , JsonDate(..)
-  , MediaType
-  , SpatialExtent
   , Collection
+  , CollectionsResponse
   , Extent
+  , Interval
   , ItemAsset
+  , JsonDate(..)
   , Link
   , LinkType
+  , MediaType
   , Provider
   , ProviderRole
-  , TemporalExtent(..)
+  , SpatialExtent
+  , TemporalExtent
   , TwoDimBbox
   )
 import Effect (Effect)
