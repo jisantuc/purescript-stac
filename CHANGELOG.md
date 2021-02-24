@@ -7,3 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Replaced OneOrBoth custom refinement with These [#8](https://github.com/jisantuc/purescript-stac/pull/8) (@jisantuc)
+
+### Added
+- Added `Item` type [#6](https://github.com/jisantuc/purescript-stac/pull/6) (@jisantuc)
