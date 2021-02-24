@@ -12,6 +12,7 @@ import Data.Stac
   , CollectionsResponse
   , Extent
   , Interval
+  , Item
   , ItemAsset
   , JsonDate(..)
   , Link
@@ -49,6 +50,7 @@ main = do
       test "MediaType" $ liftEffect $ quickCheck (\(x :: MediaType) -> codecRoundTrip x)
       test "AssetRole" $ liftEffect $ quickCheck (\(x :: AssetRole) -> codecRoundTrip x)
       test "ItemAsset" $ liftEffect $ quickCheck (\(x :: ItemAsset) -> codecRoundTrip x)
+      test "Item" $ liftEffect $ quickCheck (\(x :: Item) -> codecRoundTrip x)
 
 dateTime :: Maybe JsonDate
 dateTime =

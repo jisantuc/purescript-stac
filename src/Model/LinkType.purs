@@ -27,7 +27,7 @@ data LinkType
   | StacRoot
   | Parent
   | Child
-  | Item
+  | ItemLink
   | Items
   | Source
   | CollectionLink
@@ -59,7 +59,7 @@ instance decodeLinkType :: DecodeJson LinkType where
     Just "root" -> Right StacRoot
     Just "parent" -> Right Parent
     Just "child" -> Right Child
-    Just "item" -> Right Item
+    Just "item" -> Right ItemLink
     Just "items" -> Right Items
     Just "source" -> Right Source
     Just "collection" -> Right CollectionLink
@@ -87,7 +87,7 @@ instance encodeLinkType :: EncodeJson LinkType where
           StacRoot -> "root"
           Parent -> "parent"
           Child -> "child"
-          Item -> "item"
+          ItemLink -> "item"
           Items -> "items"
           Source -> "source"
           CollectionLink -> "collection"
@@ -117,7 +117,7 @@ instance arbitraryLinkType :: Arbitrary LinkType where
                   , StacRoot
                   , Parent
                   , Child
-                  , Item
+                  , ItemLink
                   , Items
                   , Source
                   , CollectionLink

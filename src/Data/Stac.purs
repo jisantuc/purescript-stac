@@ -2,6 +2,7 @@ module Data.Stac
   ( module Model.AssetRole
   , module Model.Collection
   , module Model.CollectionsResponse
+  , module Model.Item
   , module Model.ItemAsset
   , module Model.LinkType
   , module Model.Link
@@ -17,6 +18,7 @@ import Model.AssetRole (AssetRole(..))
 import Model.Collection (Collection(..))
 import Model.CollectionsResponse (CollectionsResponse(..))
 import Model.Extent (Interval, OneOrBoth, SpatialExtent, Extent, TemporalExtent(..), TwoDimBbox(..))
+import Model.Item (Item(..))
 import Model.ItemAsset (ItemAsset(..))
 import Model.JsonDate (JsonDate(..), fromString)
 import Model.Link (Link(..))

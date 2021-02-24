@@ -133,8 +133,8 @@ instance encodeJsonStacCollection :: EncodeJson Collection where
 
 instance arbitraryStacCollection :: Arbitrary Collection where
   arbitrary = do
-    stacVersion <- pure $ "1.0.0-beta.2"
-    stacExtensions <- pure $ []
+    stacVersion <- pure "1.0.0-beta.2"
+    stacExtensions <- pure []
     id <- alphaStringGen 12
     title <- maybe (alphaStringGen 12)
     description <- alphaStringGen 12
