@@ -5,8 +5,8 @@ import Data.Argonaut.Decode ((.:))
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
 import Data.Monoid (mempty)
-import Model.Collection (StacCollection)
-import Model.Link (StacLink)
+import Model.Collection (Collection)
+import Model.Link (Link)
 import Prelude (class Eq, class Monoid, class Semigroup, class Show, bind, pure, ($), (<>))
 import Test.QuickCheck (class Arbitrary)
 
@@ -15,8 +15,8 @@ import Test.QuickCheck (class Arbitrary)
 -- | required of STAC APIs.
 newtype CollectionsResponse
   = CollectionsResponse
-  { collections :: Array StacCollection
-  , links :: Array StacLink
+  { collections :: Array Collection
+  , links :: Array Link
   }
 
 instance semigroupCollectionsResponse :: Semigroup CollectionsResponse where

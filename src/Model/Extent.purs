@@ -88,7 +88,7 @@ type Interval
 
 -- | A `StacExtent` represents the combined time and geographic extents
 -- | covered by a `StacCollection`.
-type StacExtent
+type Extent
   = { spatial :: SpatialExtent
     , temporal :: Interval
     }

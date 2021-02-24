@@ -15,6 +15,7 @@ You can edit this file as you like.
   , "quickcheck"
   , "test-unit"
   , "these"
+  , "turf"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]

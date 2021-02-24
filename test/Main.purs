@@ -1,6 +1,5 @@
 module Test.Main where
 
-import Prelude (class Eq, class Show, Unit, discard, show, ($), (<$>), (<*>), (<>), (==))
 import Data.Argonaut (class DecodeJson, class EncodeJson, decodeJson, encodeJson)
 import Data.Date (Month(..))
 import Data.DateTime (DateTime(..), Time(..), canonicalDate)
@@ -8,21 +7,26 @@ import Data.Either (Either(..))
 import Data.Enum (toEnum)
 import Data.Maybe (Maybe(..))
 import Data.Stac
-  ( CollectionsResponse
+  ( AssetRole
+  , Collection
+  , CollectionsResponse
+  , Extent
   , Interval
+  , Item
+  , ItemAsset
   , JsonDate(..)
+  , Link
+  , LinkType
+  , MediaType
+  , Provider
+  , ProviderRole
   , SpatialExtent
-  , StacCollection
-  , StacExtent
-  , StacLink
-  , StacLinkType
-  , StacProvider
-  , StacProviderRole
   , TemporalExtent
   , TwoDimBbox
   )
 import Effect (Effect)
 import Effect.Class (liftEffect)
+import Prelude (class Eq, class Show, Unit, discard, show, ($), (<$>), (<*>), (<>), (==))
 import Test.QuickCheck (Result, quickCheck, (<?>))
 import Test.Unit (suite, test)
 import Test.Unit.Main (runTest)
@@ -32,17 +36,21 @@ main = do
   runTest do
     suite "Codec round trips" do
       test "TwoDimBbox" $ liftEffect $ quickCheck (\(x :: TwoDimBbox) -> codecRoundTrip x)
-      test "StacProviderRole" $ liftEffect $ quickCheck (\(x :: StacProviderRole) -> codecRoundTrip x)
+      test "ProviderRole" $ liftEffect $ quickCheck (\(x :: ProviderRole) -> codecRoundTrip x)
       test "SpatialExtent" $ liftEffect $ quickCheck (\(x :: SpatialExtent) -> codecRoundTrip x)
       test "JsonDate" $ liftEffect $ quickCheck (\(x :: JsonDate) -> codecRoundTrip x)
       test "TemporalExtent" $ liftEffect $ quickCheck (\(x :: TemporalExtent) -> codecRoundTrip x)
       test "Interval" $ liftEffect $ quickCheck (\(x :: Interval) -> codecRoundTrip x)
-      test "StacExtent" $ liftEffect $ quickCheck (\(x :: StacExtent) -> codecRoundTrip x)
-      test "StacProvider" $ liftEffect $ quickCheck (\(x :: StacProvider) -> codecRoundTrip x)
-      test "StacLinkType" $ liftEffect $ quickCheck (\(x :: StacLinkType) -> codecRoundTrip x)
-      test "StacLink" $ liftEffect $ quickCheck (\(x :: StacLink) -> codecRoundTrip x)
-      test "StacCollection" $ liftEffect $ quickCheck (\(x :: StacCollection) -> codecRoundTrip x)
-      test "StacCollectionResponse" $ liftEffect $ quickCheck (\(x :: CollectionsResponse) -> codecRoundTrip x)
+      test "Extent" $ liftEffect $ quickCheck (\(x :: Extent) -> codecRoundTrip x)
+      test "Provider" $ liftEffect $ quickCheck (\(x :: Provider) -> codecRoundTrip x)
+      test "LinkType" $ liftEffect $ quickCheck (\(x :: LinkType) -> codecRoundTrip x)
+      test "Link" $ liftEffect $ quickCheck (\(x :: Link) -> codecRoundTrip x)
+      test "Collection" $ liftEffect $ quickCheck (\(x :: Collection) -> codecRoundTrip x)
+      test "CollectionResponse" $ liftEffect $ quickCheck (\(x :: CollectionsResponse) -> codecRoundTrip x)
+      test "MediaType" $ liftEffect $ quickCheck (\(x :: MediaType) -> codecRoundTrip x)
+      test "AssetRole" $ liftEffect $ quickCheck (\(x :: AssetRole) -> codecRoundTrip x)
+      test "ItemAsset" $ liftEffect $ quickCheck (\(x :: ItemAsset) -> codecRoundTrip x)
+      test "Item" $ liftEffect $ quickCheck (\(x :: Item) -> codecRoundTrip x)
 
 dateTime :: Maybe JsonDate
 dateTime =

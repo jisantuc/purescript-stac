@@ -3,12 +3,12 @@ module Model.Testing where
 import Prelude
 import Control.Apply (lift2)
 import Control.Monad.Gen (elements, oneOf)
-import Data.Argonaut (Json, encodeJson)
+import Data.Argonaut (class EncodeJson, Json, encodeJson)
 import Data.Array.NonEmpty (cons', toNonEmpty)
 import Data.Maybe (Maybe(..))
 import Foreign.Object (Object)
 import Foreign.Object.Gen (genForeignObject)
-import Test.QuickCheck (arbitrary)
+import Test.QuickCheck (class Arbitrary, arbitrary)
 import Test.QuickCheck.Gen (Gen)
 
 alphaStringGen :: Int -> Gen String
@@ -29,3 +29,6 @@ maybe g = oneOf $ toNonEmpty $ pure Nothing `cons'` [ Just <$> g ]
 
 jsObjectGen :: Gen (Object Json)
 jsObjectGen = genForeignObject (alphaStringGen 12) (encodeJson <$> (arbitrary :: Gen Number))
+
+jsObjectAGen :: forall a. Arbitrary a => EncodeJson a => Gen (Object a)
+jsObjectAGen = genForeignObject (alphaStringGen 12) arbitrary
