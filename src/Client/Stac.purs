@@ -1,15 +1,32 @@
-module Client.Stac (getCollections) where
+module Client.Stac
+  ( getCollections
+  , getCollection
+  , getCollectionItem
+  , getCollectionItems
+  , nextCollectionItemsPage
+  ) where
 
-import Affjax (Error(..), defaultRequest)
+import Affjax (Error(..), URL, defaultRequest)
 import Affjax as AX
 import Affjax.ResponseFormat as ResponseFormat
-import Control.Promise (Promise, fromAff)
-import Data.Argonaut (JsonDecodeError, decodeJson, printJsonDecodeError)
+import Data.Argonaut (class DecodeJson, Json, JsonDecodeError, decodeJson, printJsonDecodeError)
+import Data.Array (find)
 import Data.Bifunctor (lmap)
-import Data.Either (Either)
-import Effect (Effect)
+import Data.Either (Either(..))
+import Data.Maybe (Maybe(..))
+import Data.String.NonEmpty (NonEmptyString, toString)
+import Effect.Aff (Aff)
+import Model.Collection (Collection)
+import Model.CollectionItemsResponse (CollectionItemsResponse)
 import Model.CollectionsResponse (CollectionsResponse)
-import Prelude (bind, pure, ($), (<>), (>>=))
+import Model.Item (Item)
+import Model.Link (Link(..))
+import Model.LinkType (LinkType(..))
+import Prelude (bind, pure, ($), (<<<), (<>), (==), (>>=))
+import URI.Fragment as Fragment
+
+urlSafe :: NonEmptyString -> String
+urlSafe = Fragment.unsafeToString <<< Fragment.fromString <<< toString
 
 adaptError :: JsonDecodeError -> Error
 adaptError jsErr =
@@ -17,17 +34,68 @@ adaptError jsErr =
     ( "Request failed to produce a meaningful response: " <> printJsonDecodeError jsErr
     )
 
+getDecodedBody :: forall a. DecodeJson a => AX.Response Json -> Either Error a
+getDecodedBody =
+  lmap adaptError
+    <<< decodeJson
+    <<< _.body
+
 -- | Fetch the `/collections` route from a STAC API.
-getCollections :: String -> Effect (Promise (Either Error CollectionsResponse))
-getCollections apiHost =
-  fromAff
-    $ do
-        result <-
-          AX.request
-            $ defaultRequest { url = apiHost <> "/collections", responseFormat = ResponseFormat.json }
-        pure $ result
-          >>= ( \response ->
-                lmap adaptError $ decodeCollections response.body
-            )
-  where
-  decodeCollections js = decodeJson js :: Either JsonDecodeError CollectionsResponse
+getCollections :: URL -> Aff (Either Error CollectionsResponse)
+getCollections apiHost = do
+  result <-
+    AX.request
+      $ defaultRequest { url = apiHost <> "/collections", responseFormat = ResponseFormat.json }
+  pure $ result >>= getDecodedBody
+
+-- | Fetch a single collection from the `/collections/<id>` route from a STAC API.
+-- | This method will URL-encode the collection ID for you, so you're free to provide the
+-- | exact value that you'd see, for example, in the response from `getCollections`.
+getCollection :: URL -> NonEmptyString -> Aff (Either Error Collection)
+getCollection apiHost collectionId = do
+  result <-
+    AX.request
+      $ defaultRequest
+          { url = apiHost <> "/collections" <> urlSafe collectionId
+          , responseFormat = ResponseFormat.json
+          }
+  pure $ result >>= getDecodedBody
+
+getCollectionItemsForUrl :: String -> Aff (Either Error CollectionItemsResponse)
+getCollectionItemsForUrl urlString = do
+  result <-
+    AX.request
+      $ defaultRequest
+          { url = urlString
+          , responseFormat = ResponseFormat.json
+          }
+  pure $ result >>= getDecodedBody
+
+-- | Fetch items in a collection from the `/collections/<id>/items` route from a STAC API
+-- | This method will URL-encode the collection ID for you, so you're free to provide the
+-- | exact value that you'd see, for example, in the response from `getCollections`.
+getCollectionItems :: URL -> NonEmptyString -> Aff (Either Error CollectionItemsResponse)
+getCollectionItems apiHost collectionId =
+  getCollectionItemsForUrl
+    $ apiHost
+    <> "/collections"
+    <> urlSafe collectionId
+
+-- | Fetch a single item from the `/collections/<id>/items/<id>` route from a STAC API.
+-- | This method will URL-encode the collection and item IDs for you, so you're free to provide the
+-- | exact values that you'd see, for example, in the response from `getCollectionItems`.
+getCollectionItem :: URL -> NonEmptyString -> NonEmptyString -> Aff (Either Error Item)
+getCollectionItem apiHost collectionId itemId = do
+  result <-
+    AX.request
+      $ defaultRequest
+          { url = apiHost <> "/collections" <> urlSafe collectionId <> "/items/" <> urlSafe itemId
+          , responseFormat = ResponseFormat.json
+          }
+  pure $ result >>= getDecodedBody
+
+-- | Fetch the next page of collection items.
+nextCollectionItemsPage :: CollectionItemsResponse -> Aff (Either Error CollectionItemsResponse)
+nextCollectionItemsPage { links, features } = case find (\(Link { rel }) -> rel == Next) links of
+  Just (Link { href }) -> getCollectionItemsForUrl href
+  Nothing -> pure $ Right ({ features: [], links: [] })

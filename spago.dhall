@@ -16,6 +16,7 @@ You can edit this file as you like.
   , "test-unit"
   , "these"
   , "turf"
+  , "uri"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]

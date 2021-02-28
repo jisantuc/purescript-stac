@@ -1,6 +1,7 @@
 module Data.Stac
   ( module Model.AssetRole
   , module Model.Collection
+  , module Model.CollectionItemsResponse
   , module Model.CollectionsResponse
   , module Model.Item
   , module Model.ItemAsset
@@ -16,6 +17,7 @@ module Data.Stac
 import Client.Stac (getCollections)
 import Model.AssetRole (AssetRole(..))
 import Model.Collection (Collection(..))
+import Model.CollectionItemsResponse (CollectionItemsResponse)
 import Model.CollectionsResponse (CollectionsResponse(..))
 import Model.Extent (Interval, OneOrBoth, SpatialExtent, Extent, TemporalExtent(..), TwoDimBbox(..))
 import Model.Item (Item(..))
