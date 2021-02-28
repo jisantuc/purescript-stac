@@ -121,5 +121,5 @@ in  upstream
       , "test-unit"
       ]
     , repo = "https://github.com/jisantuc/purescript-turf.git"
-    , version = "v0.1.0"
+    , version = "v0.1.2"
     }
