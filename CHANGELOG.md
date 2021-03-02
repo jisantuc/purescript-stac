@@ -10,3 +10,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added `Item` type [#6](https://github.com/jisantuc/purescript-stac/pull/6) (@jisantuc)
+- Implemented core API specification client methods [#10](https://github.com/jisantuc/purescript-stac/pull/10) (@jisantuc)
