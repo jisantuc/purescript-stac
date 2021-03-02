@@ -1,9 +1,9 @@
 module Model.Item where
 
-import Data.Argonaut (class DecodeJson, class EncodeJson, Json, JsonDecodeError(..), encodeJson, stringify, toObject, (:=), (~>), (.:))
+import Data.Argonaut (class DecodeJson, class EncodeJson, Json, JsonDecodeError(..), encodeJson, jsonEmptyObject, stringify, toObject, (.:), (:=), (~>))
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
-import Foreign.Object (Object, empty)
+import Foreign.Object (Object)
 import Model.Extent (TwoDimBbox)
 import Model.Geometry (Geometry)
 import Model.ItemAsset (ItemAsset)
@@ -51,7 +51,7 @@ instance encodeJsonItem :: EncodeJson Item where
       := encodeJson "Feature"
       ~> "properties"
       := encodeJson obj.properties
-      ~> encodeJson (empty :: Object Int)
+      ~> jsonEmptyObject
 
 instance decodeJsonItem :: DecodeJson Item where
   decodeJson js = case toObject js of

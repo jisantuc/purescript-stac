@@ -10,6 +10,7 @@ module Data.Stac
   , module Model.JsonDate
   , module Model.MediaType
   , module Model.Extent
+  , module Model.LandingPage
   , module Model.Provider
   , module Client.Stac
   ) where
@@ -23,6 +24,7 @@ import Model.Extent (Interval, OneOrBoth, SpatialExtent, Extent, TemporalExtent(
 import Model.Item (Item(..))
 import Model.ItemAsset (ItemAsset(..))
 import Model.JsonDate (JsonDate(..), fromString)
+import Model.LandingPage (LandingPage(..))
 import Model.Link (Link(..))
 import Model.LinkType (LinkType(..))
 import Model.MediaType (MediaType(..))
