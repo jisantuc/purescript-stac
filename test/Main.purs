@@ -12,6 +12,7 @@ import Data.Stac
   , Collection
   , CollectionItemsResponse
   , CollectionsResponse
+  , ConformanceClasses
   , Extent
   , Interval
   , Item
@@ -65,6 +66,7 @@ main = do
       test "Item" $ liftEffect $ quickCheck (\(x :: Item) -> codecRoundTrip x)
       test "CollectionItemsResponse" $ liftEffect $ quickCheck (\(x :: CollectionItemsResponse) -> codecRoundTrip x)
       test "LandingPage" $ liftEffect $ quickCheck (\(x :: LandingPage) -> codecRoundTrip x)
+      test "ConformanceClasses" $ liftEffect $ quickCheck (\(x :: ConformanceClasses) -> codecRoundTrip x)
 
 codecRoundTrip :: forall a. Eq a => Show a => DecodeJson a => EncodeJson a => a -> Result
 codecRoundTrip a =

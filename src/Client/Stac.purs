@@ -4,6 +4,7 @@ module Client.Stac
   , getCollectionItem
   , getCollectionItems
   , nextCollectionItemsPage
+  , getConformance
   , getLandingPage
   ) where
 
@@ -20,6 +21,7 @@ import Effect.Aff (Aff)
 import Model.Collection (Collection)
 import Model.CollectionItemsResponse (CollectionItemsResponse)
 import Model.CollectionsResponse (CollectionsResponse)
+import Model.ConformanceClasses (ConformanceClasses)
 import Model.Item (Item)
 import Model.LandingPage (LandingPage)
 import Model.Link (Link(..))
@@ -87,3 +89,9 @@ nextCollectionItemsPage { links, features } = case find (\(Link { rel }) -> rel 
 -- | about its conformance classes.
 getLandingPage :: URL -> Aff (Either Error LandingPage)
 getLandingPage = fetchUrl
+
+-- | Fetch the specifications that this API conforms to.
+-- | Note that this informance is also included in the landing page
+-- | endpoint, so you probably will never need to call this method specifically.
+getConformance :: URL -> Aff (Either Error ConformanceClasses)
+getConformance = fetchUrl <<< (_ <> "/conformance")

@@ -9,6 +9,7 @@ import Effect (Effect)
 import Model.Collection (Collection)
 import Model.CollectionItemsResponse (CollectionItemsResponse)
 import Model.CollectionsResponse (CollectionsResponse)
+import Model.ConformanceClasses (ConformanceClasses)
 import Model.Item (Item)
 import Model.LandingPage (LandingPage)
 import Prelude (($), (<<<))
@@ -44,3 +45,9 @@ nextCollectionItemsPage = fromAff <<< Stac.nextCollectionItemsPage
 -- | about its conformance classes.
 getLandingPage :: URL -> Effect (Promise (Either Error LandingPage))
 getLandingPage = fromAff <<< Stac.getLandingPage
+
+-- | Fetch the specifications that this API conforms to.
+-- | Note that this informance is also included in the landing page
+-- | endpoint, so you probably will never need to call this method specifically.
+getConformance :: URL -> Effect (Promise (Either Error ConformanceClasses))
+getConformance = fromAff <<< Stac.getConformance
