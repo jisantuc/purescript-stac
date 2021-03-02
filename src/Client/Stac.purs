@@ -4,6 +4,7 @@ module Client.Stac
   , getCollectionItem
   , getCollectionItems
   , nextCollectionItemsPage
+  , getLandingPage
   ) where
 
 import Affjax (Error(..), URL, defaultRequest)
@@ -20,6 +21,7 @@ import Model.Collection (Collection)
 import Model.CollectionItemsResponse (CollectionItemsResponse)
 import Model.CollectionsResponse (CollectionsResponse)
 import Model.Item (Item)
+import Model.LandingPage (LandingPage)
 import Model.Link (Link(..))
 import Model.LinkType (LinkType(..))
 import Prelude (bind, pure, ($), (<<<), (<>), (==), (>>=))
@@ -79,3 +81,9 @@ nextCollectionItemsPage :: CollectionItemsResponse -> Aff (Either Error Collecti
 nextCollectionItemsPage { links, features } = case find (\(Link { rel }) -> rel == Next) links of
   Just (Link { href }) -> fetchUrl href
   Nothing -> pure <<< Right $ { features: [], links: [] }
+
+-- | Fetch the landing page from a STAC api at `/`. This page
+-- | holds information about the extensions implemented by this STAC API and
+-- | about its conformance classes.
+getLandingPage :: URL -> Aff (Either Error LandingPage)
+getLandingPage = fetchUrl
