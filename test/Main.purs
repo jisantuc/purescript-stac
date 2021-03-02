@@ -9,6 +9,7 @@ import Data.Maybe (Maybe(..))
 import Data.Stac
   ( AssetRole
   , Collection
+  , CollectionItemsResponse
   , CollectionsResponse
   , Extent
   , Interval
@@ -51,6 +52,7 @@ main = do
       test "AssetRole" $ liftEffect $ quickCheck (\(x :: AssetRole) -> codecRoundTrip x)
       test "ItemAsset" $ liftEffect $ quickCheck (\(x :: ItemAsset) -> codecRoundTrip x)
       test "Item" $ liftEffect $ quickCheck (\(x :: Item) -> codecRoundTrip x)
+      test "CollectionItemsResponse" $ liftEffect $ quickCheck (\(x :: CollectionItemsResponse) -> codecRoundTrip x)
 
 dateTime :: Maybe JsonDate
 dateTime =
