@@ -59,7 +59,7 @@ getCollections apiHost = fetchUrl $ apiHost <> "/collections"
 -- | This method will URL-encode the collection ID for you, so you're free to provide the
 -- | exact value that you'd see, for example, in the response from `getCollections`.
 getCollection :: URL -> NonEmptyString -> Aff (Either Error Collection)
-getCollection apiHost collectionId = fetchUrl $ apiHost <> "/collections" <> urlSafe collectionId
+getCollection apiHost collectionId = fetchUrl $ apiHost <> "/collections/" <> urlSafe collectionId
 
 -- | Fetch items in a collection from the `/collections/<id>/items` route from a STAC API
 -- | This method will URL-encode the collection ID for you, so you're free to provide the
@@ -68,8 +68,9 @@ getCollectionItems :: URL -> NonEmptyString -> Aff (Either Error CollectionItems
 getCollectionItems apiHost collectionId =
   fetchUrl
     $ apiHost
-    <> "/collections"
+    <> "/collections/"
     <> urlSafe collectionId
+    <> "/items"
 
 -- | Fetch a single item from the `/collections/<id>/items/<id>` route from a STAC API.
 -- | This method will URL-encode the collection and item IDs for you, so you're free to provide the

@@ -5,6 +5,7 @@
     "test": "spago test --no-install"
   },
   "dependencies": {
-    "@turf/helpers": "^6.3.0"
+    "@turf/helpers": "^6.3.0",
+    "xhr2": "^0.2.1"
   }
 }
