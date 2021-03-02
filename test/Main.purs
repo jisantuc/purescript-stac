@@ -1,20 +1,24 @@
 module Test.Main where
 
-import Data.Argonaut (class DecodeJson, class EncodeJson, decodeJson, encodeJson)
-import Data.Date (Month(..))
-import Data.DateTime (DateTime(..), Time(..), canonicalDate)
+import Data.Argonaut
+  ( class DecodeJson
+  , class EncodeJson
+  , decodeJson
+  , encodeJson
+  )
 import Data.Either (Either(..))
-import Data.Enum (toEnum)
-import Data.Maybe (Maybe(..))
 import Data.Stac
   ( AssetRole
   , Collection
+  , CollectionItemsResponse
   , CollectionsResponse
+  , ConformanceClasses
   , Extent
   , Interval
   , Item
   , ItemAsset
-  , JsonDate(..)
+  , JsonDate
+  , LandingPage
   , Link
   , LinkType
   , MediaType
@@ -26,7 +30,16 @@ import Data.Stac
   )
 import Effect (Effect)
 import Effect.Class (liftEffect)
-import Prelude (class Eq, class Show, Unit, discard, show, ($), (<$>), (<*>), (<>), (==))
+import Prelude
+  ( class Eq
+  , class Show
+  , Unit
+  , discard
+  , show
+  , ($)
+  , (<>)
+  , (==)
+  )
 import Test.QuickCheck (Result, quickCheck, (<?>))
 import Test.Unit (suite, test)
 import Test.Unit.Main (runTest)
@@ -51,15 +64,9 @@ main = do
       test "AssetRole" $ liftEffect $ quickCheck (\(x :: AssetRole) -> codecRoundTrip x)
       test "ItemAsset" $ liftEffect $ quickCheck (\(x :: ItemAsset) -> codecRoundTrip x)
       test "Item" $ liftEffect $ quickCheck (\(x :: Item) -> codecRoundTrip x)
-
-dateTime :: Maybe JsonDate
-dateTime =
-  let
-    date = canonicalDate <$> toEnum 2021 <*> Just January <*> toEnum 1
-
-    time = Time <$> toEnum 0 <*> toEnum 0 <*> toEnum 0 <*> toEnum 0
-  in
-    JsonDate <$> (DateTime <$> date <*> time)
+      test "CollectionItemsResponse" $ liftEffect $ quickCheck (\(x :: CollectionItemsResponse) -> codecRoundTrip x)
+      test "LandingPage" $ liftEffect $ quickCheck (\(x :: LandingPage) -> codecRoundTrip x)
+      test "ConformanceClasses" $ liftEffect $ quickCheck (\(x :: ConformanceClasses) -> codecRoundTrip x)
 
 codecRoundTrip :: forall a. Eq a => Show a => DecodeJson a => EncodeJson a => a -> Result
 codecRoundTrip a =
