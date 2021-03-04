@@ -105,21 +105,6 @@ in  upstream
 -------------------------------
 -}
 let upstream =
-      https://github.com/purescript/package-sets/releases/download/psc-0.13.8-20210226/packages.dhall sha256:7e973070e323137f27e12af93bc2c2f600d53ce4ae73bb51f34eb7d7ce0a43ea
+      https://github.com/purescript/package-sets/releases/download/psc-0.14.0-20210302/packages.dhall sha256:20cc5b89cf15433623ad6f250f112bf7a6bd82b5972363ecff4abf1febb02c50
 
 in  upstream
-  with turf =
-    { dependencies =
-      [ "argonaut-codecs"
-      , "argonaut-core"
-      , "assert"
-      , "console"
-      , "effect"
-      , "foreign-object"
-      , "psci-support"
-      , "quickcheck"
-      , "test-unit"
-      ]
-    , repo = "https://github.com/jisantuc/purescript-turf.git"
-    , version = "v0.1.2"
-    }
