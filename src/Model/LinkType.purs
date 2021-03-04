@@ -7,11 +7,11 @@ import Data.Argonaut
   , encodeJson
   , toString
   )
-import Data.Array.NonEmpty (cons', toNonEmpty)
+import Data.Array.NonEmpty (cons')
 import Data.Either (Either(..))
 import Data.Generic.Rep (class Generic)
-import Data.Generic.Rep.Show (genericShow)
 import Data.Maybe (Maybe(..))
+import Data.Show.Generic (genericShow)
 import Prelude (class Eq, class Show, pure, ($), (<$>), (<<<))
 import Test.QuickCheck (class Arbitrary, arbitrary)
 import Test.QuickCheck.Gen (oneOf)
@@ -109,7 +109,6 @@ instance encodeLinkType :: EncodeJson LinkType where
 instance arbitraryLinkType :: Arbitrary LinkType where
   arbitrary =
     oneOf
-      $ toNonEmpty
       $ (VendorLinkType <$> arbitrary)
           `cons'`
             ( pure

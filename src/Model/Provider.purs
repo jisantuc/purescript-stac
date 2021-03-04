@@ -1,7 +1,7 @@
 module Model.Provider where
 
 import Data.Argonaut (class DecodeJson, class EncodeJson, JsonDecodeError(..), encodeJson, toString)
-import Data.Array.NonEmpty (cons', toNonEmpty)
+import Data.Array.NonEmpty (cons')
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
 import Data.String (toLower)
@@ -41,14 +41,13 @@ instance encodeProviderRole :: EncodeJson ProviderRole where
 instance arbitraryProviderRole :: Arbitrary ProviderRole where
   arbitrary =
     elements
-      $ toNonEmpty
-          ( Licensor
-              `cons'`
-                [ Producer
-                , Processor
-                , Host
-                ]
-          )
+      $ ( Licensor
+            `cons'`
+              [ Producer
+              , Processor
+              , Host
+              ]
+        )
 
 -- | A `Provider` indicates the name and responsibilities of entities
 -- | responsible for some piece of the data's provenance. More information
