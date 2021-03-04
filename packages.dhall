@@ -113,12 +113,10 @@ in  upstream
       [ "argonaut-codecs"
       , "argonaut-core"
       , "assert"
-      , "console"
       , "effect"
       , "foreign-object"
       , "psci-support"
       , "quickcheck"
-      , "test-unit"
       ]
     , repo = "https://github.com/jisantuc/purescript-turf.git"
     , version = "v1.0.0"

@@ -29,50 +29,36 @@ import Data.Stac
   , TwoDimBbox
   )
 import Effect (Effect)
-import Effect.Class (liftEffect)
-import Prelude
-  ( class Eq
-  , class Show
-  , Unit
-  , discard
-  , show
-  , ($)
-  , (<>)
-  , (==)
-  )
+import Prelude (class Eq, class Show, Unit, discard, show, (<>), (==))
 import Test.QuickCheck (Result, quickCheck, (<?>))
-import Test.Unit (suite, test)
-import Test.Unit.Main (runTest)
 
 main :: Effect Unit
 main = do
-  runTest do
-    suite "Codec round trips" do
-      test "TwoDimBbox" $ liftEffect $ quickCheck (\(x :: TwoDimBbox) -> codecRoundTrip x)
-      test "ProviderRole" $ liftEffect $ quickCheck (\(x :: ProviderRole) -> codecRoundTrip x)
-      test "SpatialExtent" $ liftEffect $ quickCheck (\(x :: SpatialExtent) -> codecRoundTrip x)
-      test "JsonDate" $ liftEffect $ quickCheck (\(x :: JsonDate) -> codecRoundTrip x)
-      test "TemporalExtent" $ liftEffect $ quickCheck (\(x :: TemporalExtent) -> codecRoundTrip x)
-      test "Interval" $ liftEffect $ quickCheck (\(x :: Interval) -> codecRoundTrip x)
-      test "Extent" $ liftEffect $ quickCheck (\(x :: Extent) -> codecRoundTrip x)
-      test "Provider" $ liftEffect $ quickCheck (\(x :: Provider) -> codecRoundTrip x)
-      test "LinkType" $ liftEffect $ quickCheck (\(x :: LinkType) -> codecRoundTrip x)
-      test "Link" $ liftEffect $ quickCheck (\(x :: Link) -> codecRoundTrip x)
-      test "Collection" $ liftEffect $ quickCheck (\(x :: Collection) -> codecRoundTrip x)
-      test "CollectionResponse" $ liftEffect $ quickCheck (\(x :: CollectionsResponse) -> codecRoundTrip x)
-      test "MediaType" $ liftEffect $ quickCheck (\(x :: MediaType) -> codecRoundTrip x)
-      test "AssetRole" $ liftEffect $ quickCheck (\(x :: AssetRole) -> codecRoundTrip x)
-      test "ItemAsset" $ liftEffect $ quickCheck (\(x :: ItemAsset) -> codecRoundTrip x)
-      test "Item" $ liftEffect $ quickCheck (\(x :: Item) -> codecRoundTrip x)
-      test "CollectionItemsResponse" $ liftEffect $ quickCheck (\(x :: CollectionItemsResponse) -> codecRoundTrip x)
-      test "LandingPage" $ liftEffect $ quickCheck (\(x :: LandingPage) -> codecRoundTrip x)
-      test "ConformanceClasses" $ liftEffect $ quickCheck (\(x :: ConformanceClasses) -> codecRoundTrip x)
+  quickCheck (\(x :: TwoDimBbox) -> codecRoundTrip "TwoDimBbox" x)
+  quickCheck (\(x :: ProviderRole) -> codecRoundTrip "ProviderRole" x)
+  quickCheck (\(x :: SpatialExtent) -> codecRoundTrip "SpatialExtent" x)
+  quickCheck (\(x :: JsonDate) -> codecRoundTrip "JsonDate" x)
+  quickCheck (\(x :: TemporalExtent) -> codecRoundTrip "TemporalExtent" x)
+  quickCheck (\(x :: Interval) -> codecRoundTrip "Interval" x)
+  quickCheck (\(x :: Extent) -> codecRoundTrip "Extent" x)
+  quickCheck (\(x :: Provider) -> codecRoundTrip "Provider" x)
+  quickCheck (\(x :: LinkType) -> codecRoundTrip "LinkType" x)
+  quickCheck (\(x :: Link) -> codecRoundTrip "Link" x)
+  quickCheck (\(x :: Collection) -> codecRoundTrip "Collection" x)
+  quickCheck (\(x :: CollectionsResponse) -> codecRoundTrip "CollectionResponse" x)
+  quickCheck (\(x :: MediaType) -> codecRoundTrip "MediaType" x)
+  quickCheck (\(x :: AssetRole) -> codecRoundTrip "AssetRole" x)
+  quickCheck (\(x :: ItemAsset) -> codecRoundTrip "ItemAsset" x)
+  quickCheck (\(x :: Item) -> codecRoundTrip "Item" x)
+  quickCheck (\(x :: CollectionItemsResponse) -> codecRoundTrip "CollectionItemsResponse" x)
+  quickCheck (\(x :: LandingPage) -> codecRoundTrip "LandingPage" x)
+  quickCheck (\(x :: ConformanceClasses) -> codecRoundTrip "ConformanceClasses" x)
 
-codecRoundTrip :: forall a. Eq a => Show a => DecodeJson a => EncodeJson a => a -> Result
-codecRoundTrip a =
+codecRoundTrip :: forall a. Eq a => Show a => DecodeJson a => EncodeJson a => String -> a -> Result
+codecRoundTrip tag a =
   let
     encoded = encodeJson a
 
     decoded = decodeJson encoded
   in
-    decoded == Right a <?> "Result: \n" <> show decoded <> "\nnot equal to expected:\n" <> show a
+    decoded == Right a <?> "Result for " <> tag <> ": \n" <> show decoded <> "\nnot equal to expected:\n" <> show a
