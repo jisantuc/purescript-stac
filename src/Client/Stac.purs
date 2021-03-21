@@ -77,7 +77,7 @@ getCollectionItems apiHost collectionId =
 -- | exact values that you'd see, for example, in the response from `getCollectionItems`.
 getCollectionItem :: URL -> NonEmptyString -> NonEmptyString -> Aff (Either Error Item)
 getCollectionItem apiHost collectionId itemId = do
-  fetchUrl $ apiHost <> "/collections" <> urlSafe collectionId <> "/items/" <> urlSafe itemId
+  fetchUrl $ apiHost <> "/collections/" <> urlSafe collectionId <> "/items/" <> urlSafe itemId
 
 -- | Fetch the next page of collection items.
 nextCollectionItemsPage :: CollectionItemsResponse -> Aff (Either Error CollectionItemsResponse)
