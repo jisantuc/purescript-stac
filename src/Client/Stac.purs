@@ -15,7 +15,7 @@ import Data.Argonaut (class DecodeJson, Json, JsonDecodeError, decodeJson, print
 import Data.Array (find)
 import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
-import Data.Maybe (Maybe(..))
+import Data.Maybe (Maybe(..), fromMaybe)
 import Data.String.NonEmpty (NonEmptyString, toString)
 import Effect.Aff (Aff)
 import Model.Collection (Collection)
@@ -26,7 +26,7 @@ import Model.Item (Item)
 import Model.LandingPage (LandingPage)
 import Model.Link (Link(..))
 import Model.LinkType (LinkType(..))
-import Prelude (bind, pure, ($), (<<<), (<>), (==), (>>=))
+import Prelude (bind, pure, show, ($), (<$>), (<<<), (<>), (==), (>>=))
 import URI.Fragment as Fragment
 
 urlSafe :: NonEmptyString -> String
@@ -64,13 +64,17 @@ getCollection apiHost collectionId = fetchUrl $ apiHost <> "/collections/" <> ur
 -- | Fetch items in a collection from the `/collections/<id>/items` route from a STAC API
 -- | This method will URL-encode the collection ID for you, so you're free to provide the
 -- | exact value that you'd see, for example, in the response from `getCollections`.
-getCollectionItems :: URL -> NonEmptyString -> Aff (Either Error CollectionItemsResponse)
-getCollectionItems apiHost collectionId =
+getCollectionItems :: URL -> NonEmptyString -> Maybe Int -> Aff (Either Error CollectionItemsResponse)
+getCollectionItems apiHost collectionId limit =
   fetchUrl
     $ apiHost
     <> "/collections/"
     <> urlSafe collectionId
     <> "/items"
+    <> ( fromMaybe ""
+          $ (("?limit=" <> _) <<< show)
+          <$> limit
+      )
 
 -- | Fetch a single item from the `/collections/<id>/items/<id>` route from a STAC API.
 -- | This method will URL-encode the collection and item IDs for you, so you're free to provide the
