@@ -4,6 +4,7 @@ import Affjax (Error, URL)
 import Client.Stac as Stac
 import Control.Promise (Promise, fromAff)
 import Data.Either (Either)
+import Data.Maybe (Maybe)
 import Data.String.NonEmpty (NonEmptyString)
 import Effect (Effect)
 import Model.Collection (Collection)
@@ -21,8 +22,8 @@ getCollections = fromAff <<< Stac.getCollections
 -- | Fetch items in a collection from the `/collections/<id>/items` route from a STAC API
 -- | This method will URL-encode the collection ID for you, so you're free to provide the
 -- | exact value that you'd see, for example, in the response from `getCollections`.
-getCollectionItems :: URL -> NonEmptyString -> Effect (Promise (Either Error CollectionItemsResponse))
-getCollectionItems apiHost collectionId = fromAff $ Stac.getCollectionItems apiHost collectionId
+getCollectionItems :: URL -> NonEmptyString -> Maybe Int -> Effect (Promise (Either Error CollectionItemsResponse))
+getCollectionItems apiHost collectionId limit = fromAff $ Stac.getCollectionItems apiHost collectionId limit
 
 -- | Fetch a single item from the `/collections/<id>/items/<id>` route from a STAC API
 -- | This method will URL-encode the collection and item IDs for you, so you're free to provide the
