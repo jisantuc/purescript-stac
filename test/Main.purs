@@ -16,7 +16,7 @@ import Data.Stac
   , Extent
   , Interval
   , Item
-  , ItemAsset
+  , Asset
   , JsonDate
   , LandingPage
   , Link
@@ -48,7 +48,7 @@ main = do
   quickCheck (\(x :: CollectionsResponse) -> codecRoundTrip "CollectionResponse" x)
   quickCheck (\(x :: MediaType) -> codecRoundTrip "MediaType" x)
   quickCheck (\(x :: AssetRole) -> codecRoundTrip "AssetRole" x)
-  quickCheck (\(x :: ItemAsset) -> codecRoundTrip "ItemAsset" x)
+  quickCheck (\(x :: Asset) -> codecRoundTrip "Asset" x)
   quickCheck (\(x :: Item) -> codecRoundTrip "Item" x)
   quickCheck (\(x :: CollectionItemsResponse) -> codecRoundTrip "CollectionItemsResponse" x)
   quickCheck (\(x :: LandingPage) -> codecRoundTrip "LandingPage" x)

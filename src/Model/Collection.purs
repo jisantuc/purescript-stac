@@ -1,5 +1,6 @@
 module Model.Collection where
 
+import Codec (withPredicate)
 import Data.Argonaut (class DecodeJson, class EncodeJson, Json, JsonDecodeError(..), decodeJson, encodeJson, stringify, toObject)
 import Data.Argonaut.Decode ((.:))
 import Data.Argonaut.Encode ((:=), (~>))
@@ -8,11 +9,12 @@ import Data.Foldable (elem)
 import Data.Maybe (Maybe(..))
 import Data.Set as Set
 import Foreign.Object (Object, filterKeys)
+import Model.Asset (Asset)
 import Model.Extent (Extent)
 import Model.Link (Link)
 import Model.Provider (Provider)
-import Model.Testing (alphaStringGen, jsObjectGen, maybe)
-import Prelude (class Eq, class Show, bind, not, pure, ($), (<$>), (<<<))
+import Model.Testing (alphaStringGen, jsObjectAGen, jsObjectGen, maybe)
+import Prelude (class Eq, class Show, bind, not, pure, ($), (<$>), (<<<), (==), (>>=))
 import Test.QuickCheck (class Arbitrary, arbitrary)
 import Test.QuickCheck.Gen (Gen, arrayOf)
 
@@ -22,7 +24,8 @@ import Test.QuickCheck.Gen (Gen, arrayOf)
 -- | You can see more in the [STAC specification](https://github.com/radiantearth/stac-spec/blob/v1.0.0-beta.2/collection-spec/collection-spec.md).
 newtype Collection
   = Collection
-  { stacVersion :: String
+  { _type :: String
+  , stacVersion :: String
   , stacExtensions :: Array String
   , id :: String
   , title :: Maybe String
@@ -35,6 +38,7 @@ newtype Collection
   , properties :: Json
   , links :: Array Link
   , extensionFields :: Object Json
+  , assets :: Object Asset
   }
 
 instance decodeJsonStacCollection :: DecodeJson Collection where
@@ -42,7 +46,8 @@ instance decodeJsonStacCollection :: DecodeJson Collection where
     let
       fields =
         Set.fromFoldable
-          [ "stac_version"
+          [ "type"
+          , "stac_version"
           , "stac_extensions"
           , "id"
           , "title"
@@ -54,10 +59,12 @@ instance decodeJsonStacCollection :: DecodeJson Collection where
           , "summaries"
           , "properties"
           , "links"
+          , "assets"
           ]
     in
       case toObject js of
         Just jsObject -> do
+          _type <- jsObject .: "type" >>= (_ `withPredicate` (_ == "Collection"))
           stacVersion <- jsObject .: "stac_version"
           stacExtensions <- jsObject .: "stac_extensions"
           id <- jsObject .: "id"
@@ -70,10 +77,12 @@ instance decodeJsonStacCollection :: DecodeJson Collection where
           summaries <- jsObject .: "summaries"
           properties <- jsObject .: "properties"
           links <- jsObject .: "links"
+          assets <- jsObject .: "assets"
           extensionFields <- filterKeys (\key -> not $ elem key fields) <$> decodeJson js
           pure
             $ Collection
-                { stacVersion
+                { _type
+                , stacVersion
                 , stacExtensions
                 , id
                 , title
@@ -86,12 +95,14 @@ instance decodeJsonStacCollection :: DecodeJson Collection where
                 , properties
                 , links
                 , extensionFields
+                , assets
                 }
         Nothing -> Left $ UnexpectedValue js
 
 instance encodeJsonStacCollection :: EncodeJson Collection where
   encodeJson ( Collection
-      { stacVersion
+      { _type
+    , stacVersion
     , stacExtensions
     , id
     , title
@@ -104,9 +115,12 @@ instance encodeJsonStacCollection :: EncodeJson Collection where
     , properties
     , links
     , extensionFields
+    , assets
     }
   ) =
-    "stac_version" := stacVersion
+    "type" := _type
+      ~> "stac_version"
+      := stacVersion
       ~> "stac_extensions"
       := stacExtensions
       ~> "id"
@@ -129,10 +143,13 @@ instance encodeJsonStacCollection :: EncodeJson Collection where
       := properties
       ~> "links"
       := links
+      ~> "assets"
+      := assets
       ~> encodeJson extensionFields
 
 instance arbitraryStacCollection :: Arbitrary Collection where
   arbitrary = do
+    _type <- pure "Collection"
     stacVersion <- pure "1.0.0-beta.2"
     stacExtensions <- pure []
     id <- alphaStringGen 12
@@ -146,9 +163,11 @@ instance arbitraryStacCollection :: Arbitrary Collection where
     properties <- encodeJson <$> jsObjectGen
     links <- arrayOf arbitrary
     extensionFields <- jsObjectGen
+    assets <- jsObjectAGen
     pure
       $ Collection
-          { stacVersion
+          { _type
+          , stacVersion
           , stacExtensions
           , id
           , title
@@ -161,6 +180,7 @@ instance arbitraryStacCollection :: Arbitrary Collection where
           , properties
           , links
           , extensionFields
+          , assets
           }
 
 derive newtype instance eqStacCollection :: Eq Collection
