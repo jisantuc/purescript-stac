@@ -6,7 +6,7 @@ import Data.Maybe (Maybe(..))
 import Foreign.Object (Object)
 import Model.Extent (TwoDimBbox)
 import Model.Geometry (Geometry)
-import Model.ItemAsset (ItemAsset)
+import Model.Asset (Asset)
 import Model.Link (Link)
 import Model.Testing (alphaStringGen, jsObjectAGen, jsObjectGen)
 import Prelude (class Eq, class Show, apply, bind, map, pure, unit, ($), (<<<), (<>), (>>=))
@@ -20,7 +20,7 @@ newtype Item
   , geometry :: Geometry
   , bbox :: TwoDimBbox
   , links :: Array Link
-  , assets :: Object ItemAsset
+  , assets :: Object Asset
   , collection :: Maybe String
   , properties :: Object Json
   }

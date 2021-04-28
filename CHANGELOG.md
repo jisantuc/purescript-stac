@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Collection item list supports the limit query parameter [#15](https://github.com/jisantuc/purescript-stac/pull/15) (@jisantuc)
+- Updated models for compatibility with spec version 1.0.0-rc2 [17](https://github.com/jisantuc/purescript-stac/pull/17) @jisantuc
 
 ## [1.0.1] - 2021-03-21
 ### Fixed

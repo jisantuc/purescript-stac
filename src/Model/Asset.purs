@@ -1,4 +1,4 @@
-module Model.ItemAsset where
+module Model.Asset where
 
 import Data.Argonaut (class DecodeJson, class EncodeJson, Json, JsonDecodeError(..), decodeJson, encodeJson, stringify, toObject)
 import Data.Argonaut.Decode ((.:))
@@ -21,8 +21,8 @@ import Test.QuickCheck.Gen (listOf)
 -- | GeoJSON collection of labels for a label item.
 -- | You can see more in the
 -- | [STAC specification](https://github.com/radiantearth/stac-spec/blob/v1.0.0-beta.2/item-spec/item-spec.md#asset-object).
-newtype ItemAsset
-  = ItemAsset
+newtype Asset
+  = Asset
   { href :: String
   , title :: Maybe String
   , description :: Maybe String
@@ -31,14 +31,14 @@ newtype ItemAsset
   , extensionFields :: Object Json
   }
 
-derive newtype instance eqItemAsset :: Eq ItemAsset
+derive newtype instance eqAsset :: Eq Asset
 
-derive instance genericItemAsset :: Generic ItemAsset _
+derive instance genericAsset :: Generic Asset _
 
-instance showItemAsset :: Show ItemAsset where
+instance showAsset :: Show Asset where
   show = stringify <<< encodeJson
 
-instance decodeJsonItemAsset :: DecodeJson ItemAsset where
+instance decodeJsonAsset :: DecodeJson Asset where
   decodeJson js =
     let
       fields = Set.fromFoldable [ "href", "title", "type", "description", "roles" ]
@@ -51,11 +51,11 @@ instance decodeJsonItemAsset :: DecodeJson ItemAsset where
           description <- obj .: "description"
           roles <- obj .: "roles"
           extensionFields <- filterKeys (\key -> not $ elem key fields) <$> decodeJson js
-          in ItemAsset { href, title, _type, description, roles, extensionFields }
+          in Asset { href, title, _type, description, roles, extensionFields }
         Nothing -> Left $ TypeMismatch "expected object"
 
-instance encodeJsonItemAsset :: EncodeJson ItemAsset where
-  encodeJson (ItemAsset { href, title, description, roles, _type, extensionFields }) =
+instance encodeJsonAsset :: EncodeJson Asset where
+  encodeJson (Asset { href, title, description, roles, _type, extensionFields }) =
     "href" := href
       ~> "title"
       := title
@@ -67,7 +67,7 @@ instance encodeJsonItemAsset :: EncodeJson ItemAsset where
       := roles
       ~> encodeJson extensionFields
 
-instance arbitraryItemAsset :: Arbitrary ItemAsset where
+instance arbitraryAsset :: Arbitrary Asset where
   arbitrary = ado
     href <- alphaStringGen 10
     title <- maybe $ alphaStringGen 10
@@ -75,4 +75,4 @@ instance arbitraryItemAsset :: Arbitrary ItemAsset where
     roles <- Set.fromFoldable <$> listOf 3 arbitrary
     extensionFields <- jsObjectGen
     _type <- arbitrary
-    in ItemAsset { href, title, description, roles, extensionFields, _type }
+    in Asset { href, title, description, roles, extensionFields, _type }

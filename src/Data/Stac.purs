@@ -5,7 +5,7 @@ module Data.Stac
   , module Model.CollectionsResponse
   , module Model.ConformanceClasses
   , module Model.Item
-  , module Model.ItemAsset
+  , module Model.Asset
   , module Model.LinkType
   , module Model.Link
   , module Model.JsonDate
@@ -24,7 +24,7 @@ import Model.CollectionsResponse (CollectionsResponse(..))
 import Model.ConformanceClasses (ConformanceClasses)
 import Model.Extent (Interval, OneOrBoth, SpatialExtent, Extent, TemporalExtent(..), TwoDimBbox(..))
 import Model.Item (Item(..))
-import Model.ItemAsset (ItemAsset(..))
+import Model.Asset (Asset(..))
 import Model.JsonDate (JsonDate(..), fromString)
 import Model.LandingPage (LandingPage(..))
 import Model.Link (Link(..))
