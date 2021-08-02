@@ -85,7 +85,7 @@ getCollectionItem apiHost collectionId itemId = do
 
 -- | Fetch the next page of collection items.
 nextCollectionItemsPage :: CollectionItemsResponse -> Aff (Either Error CollectionItemsResponse)
-nextCollectionItemsPage { links, features } = case find (\(Link { rel }) -> rel == Next) links of
+nextCollectionItemsPage { links } = case find (\(Link { rel }) -> rel == Next) links of
   Just (Link { href }) -> fetchUrl href
   Nothing -> pure <<< Right $ { features: [], links: [] }
 

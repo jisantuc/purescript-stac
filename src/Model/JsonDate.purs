@@ -24,9 +24,6 @@ derive newtype instance eqJsonDate :: Eq JsonDate
 instance arbitraryJsonDate :: Arbitrary JsonDate where
   arbitrary = JsonDate <$> genDateTime
 
-unJsonDate :: JsonDate -> DateTime
-unJsonDate (JsonDate dt) = dt
-
 dropTz :: String -> String
 dropTz s = folder $ go [] (toCharArray s)
   where
