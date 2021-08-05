@@ -11,7 +11,7 @@ import Test.Spec.Assertions (fail, shouldSatisfy)
 
 spec :: Spec Unit
 spec = do
-  describe "collections response is the correct shape" do
+  describe "Expectations about response shapes" do
     it "gets the expected /collections shape"
       $ getCollections "http://localhost:9090"
       >>= ( case _ of
