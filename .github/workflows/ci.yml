@@ -21,7 +21,9 @@ jobs:
 
       - name: Import a small collection
         run: |
-          docker-compose run \
+          docker-compose \
+            -f docker-compose.test.yml \
+            run \
             --rm \
             -v "$(pwd)/test/data":/opt/test/data \
             franklin \
