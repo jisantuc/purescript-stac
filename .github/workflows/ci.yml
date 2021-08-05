@@ -13,10 +13,25 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Build containers
+        run: docker-compose -f docker-compose.test.yml build
+
+      - name: Start services that tests depend on
+        run: docker-compose -f docker-compose.test.yml up -d franklin database
+
+      - name: Import a small collection
+        run: |
+          docker-compose run \
+            --rm \
+            -v "$(pwd)/test/data":/opt/test/data \
+            franklin \
+            import-catalog \
+            --catalog-root /opt/test/data/catalog.json
+
       - name: Set up a PureScript toolchain
         uses: purescript-contrib/setup-purescript@main
         with:
-          purescript: "0.14.0"
+          purescript: "0.14.3"
 
       - name: Cache PureScript dependencies
         uses: actions/cache@v2
