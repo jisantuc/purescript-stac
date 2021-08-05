@@ -69,5 +69,8 @@ jobs:
       - name: Build source
         run: spago build --no-install --purs-args '--censor-lib --strict'
 
+      - name: Warm up the STAC server
+        run: curl http://localhost:9090/collections
+
       - name: Run tests
         run: spago test --no-install
