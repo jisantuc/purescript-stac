@@ -58,14 +58,11 @@ jobs:
             --net="container:purescript-stac_franklin_1" \
             --cidfile=akita-cid \
             akitasoftware/cli:latest learn \
-              --github-repo ${GITHUB_REPOSITORY} \
-              --github-commit ${GITHUB_SHA} \
-              --github-branch ${GITHUB_HEAD_REF} \
+              --service Franklin-browser \
               --filter "port 9090"
         env:
           KEY_ID: ${{ secrets.AKITA_API_KEY_ID }}
           KEY_SECRET: ${{ secrets.AKITA_API_KEY_SECRET }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
 
       - name: Set up a PureScript toolchain
         uses: purescript-contrib/setup-purescript@main
