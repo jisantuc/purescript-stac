@@ -61,7 +61,6 @@ jobs:
               --github-repo ${GITHUB_REPOSITORY} \
               --github-commit ${GITHUB_SHA} \
               --github-branch ${GITHUB_HEAD_REF} \
-              --service Franklin-browser \
               --filter "port 9090"
         env:
           KEY_ID: ${{ secrets.AKITA_API_KEY_ID }}
