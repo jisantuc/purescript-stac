@@ -13,16 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # see discussion here: https://github.com/actions/checkout/issues/58
-      # for why this is necessary vs. "just grabbing it from the event"
-      - uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-
-      - run: echo ${PR_NUMBER}
-        name: echo PR number
-        env:
-          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
-
       - name: Start services that tests depend on
         run: docker-compose -f docker-compose.test.yml up -d franklin database
 
@@ -45,8 +35,6 @@ jobs:
             --net="container:purescript-stac_franklin_1" \
             --name=akita \
             akitasoftware/cli:latest learn \
-              --github-repo jisantuc/purescript-stac \
-              --github-pr ${PR_NUMBER} \
               --service Franklin-browser \
               --filter "port 9090"
         env:
