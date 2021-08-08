@@ -30,7 +30,7 @@ jobs:
       - name: Start Akita agent pointing to Franklin container
         run: |
           docker run --rm -it -d \
-            --env CI=${CI}
+            --env CI=${CI} \
             --env AKITA_API_KEY_ID=${KEY_ID} \
             --env AKITA_API_KEY_SECRET=${KEY_SECRET} \
             --net="container:purescript-stac_franklin_1" \
