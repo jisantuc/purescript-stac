@@ -13,6 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      # see discussion here: https://github.com/actions/checkout/issues/58
+      # for why this is necessary vs. "just grabbing it from the event"
+      - uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+
       - name: Start services that tests depend on
         run: docker-compose -f docker-compose.test.yml up -d franklin database
 
@@ -26,6 +31,22 @@ jobs:
             franklin \
             import-catalog \
             --catalog-root /opt/test/data/catalog.json
+
+      - name: Start Akita agent pointing to Franklin container
+        run: |
+          docker run --rm -it -d \
+            --env AKITA_API_KEY_ID=${KEY_ID} \
+            --env AKITA_API_KEY_SECRET=${KEY_SECRET} \
+            --net="container:purescript-stac_franklin_1" \
+            akitasoftware/cli:latest learn \
+              --github-repo jisantuc/purescript-stac \
+              --github-pr ${PR_NUMBER}
+              --service Franklin-browser \
+              --port 9090
+        env:
+          KEY_ID: ${{ secrets.AKITA_API_KEY_ID }}
+          KEY_SECRET: ${{ secrets.AKITA_API_KEY_SECRET }}
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
 
       - name: Set up a PureScript toolchain
         uses: purescript-contrib/setup-purescript@main
@@ -71,3 +92,7 @@ jobs:
 
       - name: Run tests
         run: spago test --no-install
+
+      - name: Stop the Akita agent
+        if: ${{ always() }}
+        run: docker kill --signal=SIGINT akita
