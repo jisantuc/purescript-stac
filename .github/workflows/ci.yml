@@ -51,7 +51,7 @@ jobs:
       - name: Start Akita agent pointing to Franklin container on main
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          docker run --rm \
+          docker run --rm -d \
             --env CI=${CI} \
             --env AKITA_API_KEY_ID=${KEY_ID} \
             --env AKITA_API_KEY_SECRET=${KEY_SECRET} \
