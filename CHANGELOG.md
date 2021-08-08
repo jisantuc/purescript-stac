@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Switched to spec discovery to separate client and serde tests [#18](https://github.com/jisantuc/purescript-stac/pull/18)
 - Made collection and link decoders more tolerant of missing nullable fields [#18](https://github.com/jisantuc/purescript-stac/pull/18)
 - Added Akita agent to CI to document the API endpoints consumed from API traffic [#18](https://github.com/jisantuc/purescript-stac/pull/18)
+- Only pass PR flag to Akita agent when not on the `main` branch [#20](https://github.com/jisantuc/purescript-stac/pull/20)
 
 ## [1.0.1] - 2021-03-21
 ### Fixed
