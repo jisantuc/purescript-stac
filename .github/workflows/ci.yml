@@ -33,7 +33,7 @@ jobs:
             --env AKITA_API_KEY_ID=${KEY_ID} \
             --env AKITA_API_KEY_SECRET=${KEY_SECRET} \
             --net="container:purescript-stac_franklin_1" \
-            --name=akita \
+            --cidfile=akita-cid \
             akitasoftware/cli:latest learn \
               --service Franklin-browser \
               --filter "port 9090"
@@ -92,4 +92,4 @@ jobs:
 
       - name: Stop the Akita agent
         if: ${{ always() }}
-        run: docker kill --signal=SIGINT akita
+        run: docker kill --signal=SIGINT "$(cat akita-cid)"
