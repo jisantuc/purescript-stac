@@ -38,6 +38,7 @@ jobs:
             --env AKITA_API_KEY_ID=${KEY_ID} \
             --env AKITA_API_KEY_SECRET=${KEY_SECRET} \
             --net="container:purescript-stac_franklin_1" \
+            --name akita \
             akitasoftware/cli:latest learn \
               --github-repo jisantuc/purescript-stac \
               --github-pr ${PR_NUMBER} \
