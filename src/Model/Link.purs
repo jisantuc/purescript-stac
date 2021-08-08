@@ -1,7 +1,7 @@
 module Model.Link where
 
 import Data.Argonaut (class DecodeJson, class EncodeJson, Json, JsonDecodeError(..), decodeJson, encodeJson, stringify, toObject)
-import Data.Argonaut.Decode ((.:))
+import Data.Argonaut.Decode ((.:), (.:?))
 import Data.Argonaut.Encode ((:=), (~>))
 import Data.Either (Either(..))
 import Data.Foldable (elem)
@@ -43,8 +43,8 @@ instance decodeStacLink :: DecodeJson Link where
         ado
           href <- obj .: "href"
           rel <- obj .: "rel"
-          _type <- obj .: "type"
-          title <- obj .: "title"
+          _type <- obj .:? "type"
+          title <- obj .:? "title"
           extensionFields <- filterKeys (\key -> not $ elem key fields) <$> decodeJson js
           in Link { href, rel, _type, title, extensionFields }
     Nothing -> Left $ TypeMismatch "Expected a JSON object"
