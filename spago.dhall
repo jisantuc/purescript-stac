@@ -22,6 +22,7 @@ You can edit this file as you like.
   , "lists"
   , "maybe"
   , "ordered-collections"
+  , "partial"
   , "prelude"
   , "psci-support"
   , "quickcheck"
