@@ -27,7 +27,8 @@ jobs:
             import-catalog \
             --catalog-root /opt/test/data/catalog.json
 
-      - name: Start Akita agent pointing to Franklin container
+      - name: Start Akita agent pointing to Franklin container in a PR
+        if: ${{ github.ref != 'refs/heads/main' }}
         run: |
           docker run --rm -it -d \
             --env CI=${CI} \
@@ -38,6 +39,26 @@ jobs:
             akitasoftware/cli:latest learn \
               --github-repo ${GITHUB_REPOSITORY} \
               --github-pr ${PR_NUMBER} \
+              --github-commit ${GITHUB_SHA} \
+              --github-branch ${GITHUB_HEAD_REF} \
+              --service Franklin-browser \
+              --filter "port 9090"
+        env:
+          KEY_ID: ${{ secrets.AKITA_API_KEY_ID }}
+          KEY_SECRET: ${{ secrets.AKITA_API_KEY_SECRET }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+
+      - name: Start Akita agent pointing to Franklin container on main
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          docker run --rm -it -d \
+            --env CI=${CI} \
+            --env AKITA_API_KEY_ID=${KEY_ID} \
+            --env AKITA_API_KEY_SECRET=${KEY_SECRET} \
+            --net="container:purescript-stac_franklin_1" \
+            --cidfile=akita-cid \
+            akitasoftware/cli:latest learn \
+              --github-repo ${GITHUB_REPOSITORY} \
               --github-commit ${GITHUB_SHA} \
               --github-branch ${GITHUB_HEAD_REF} \
               --service Franklin-browser \
