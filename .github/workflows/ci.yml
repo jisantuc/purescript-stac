@@ -13,10 +13,44 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Start services that tests depend on
+        run: docker-compose -f docker-compose.test.yml up -d franklin database
+
+      - name: Import a small collection
+        run: |
+          docker-compose \
+            -f docker-compose.test.yml \
+            run \
+            --rm \
+            -v "$(pwd)/test/data":/opt/test/data \
+            franklin \
+            import-catalog \
+            --catalog-root /opt/test/data/catalog.json
+
+      - name: Start Akita agent pointing to Franklin container
+        run: |
+          docker run --rm -it -d \
+            --env CI=${CI} \
+            --env AKITA_API_KEY_ID=${KEY_ID} \
+            --env AKITA_API_KEY_SECRET=${KEY_SECRET} \
+            --net="container:purescript-stac_franklin_1" \
+            --cidfile=akita-cid \
+            akitasoftware/cli:latest learn \
+              --github-repo ${GITHUB_REPOSITORY} \
+              --github-pr ${PR_NUMBER} \
+              --github-commit ${GITHUB_SHA} \
+              --github-branch ${GITHUB_HEAD_REF} \
+              --service Franklin-browser \
+              --filter "port 9090"
+        env:
+          KEY_ID: ${{ secrets.AKITA_API_KEY_ID }}
+          KEY_SECRET: ${{ secrets.AKITA_API_KEY_SECRET }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+
       - name: Set up a PureScript toolchain
         uses: purescript-contrib/setup-purescript@main
         with:
-          purescript: "0.14.0"
+          purescript: "0.14.3"
 
       - name: Cache PureScript dependencies
         uses: actions/cache@v2
@@ -52,5 +86,12 @@ jobs:
       - name: Build source
         run: spago build --no-install --purs-args '--censor-lib --strict'
 
+      - name: Warm up the STAC server
+        run: curl http://localhost:9090/collections
+
       - name: Run tests
         run: spago test --no-install
+
+      - name: Stop the Akita agent
+        if: ${{ always() }}
+        run: docker kill --signal=SIGINT "$(cat akita-cid)"

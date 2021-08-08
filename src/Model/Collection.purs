@@ -2,13 +2,14 @@ module Model.Collection where
 
 import Codec (withPredicate)
 import Data.Argonaut (class DecodeJson, class EncodeJson, Json, JsonDecodeError(..), decodeJson, encodeJson, stringify, toObject)
-import Data.Argonaut.Decode ((.:))
+import Data.Argonaut.Decode ((.:), (.:?))
 import Data.Argonaut.Encode ((:=), (~>))
 import Data.Either (Either(..))
 import Data.Foldable (elem)
-import Data.Maybe (Maybe(..))
+import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Set as Set
 import Foreign.Object (Object, filterKeys)
+import Foreign.Object as Object
 import Model.Asset (Asset)
 import Model.Extent (Extent)
 import Model.Link (Link)
@@ -77,7 +78,7 @@ instance decodeJsonStacCollection :: DecodeJson Collection where
           summaries <- jsObject .: "summaries"
           properties <- jsObject .: "properties"
           links <- jsObject .: "links"
-          assets <- jsObject .: "assets"
+          assets <- jsObject .:? "assets"
           extensionFields <- filterKeys (\key -> not $ elem key fields) <$> decodeJson js
           pure
             $ Collection
@@ -95,7 +96,7 @@ instance decodeJsonStacCollection :: DecodeJson Collection where
                 , properties
                 , links
                 , extensionFields
-                , assets
+                , assets: fromMaybe Object.empty assets
                 }
         Nothing -> Left $ UnexpectedValue js
 
