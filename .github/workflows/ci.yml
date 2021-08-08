@@ -40,7 +40,7 @@ jobs:
             --net="container:purescript-stac_franklin_1" \
             akitasoftware/cli:latest learn \
               --github-repo jisantuc/purescript-stac \
-              --github-pr ${PR_NUMBER}
+              --github-pr ${PR_NUMBER} \
               --service Franklin-browser \
               --port 9090
         env:
