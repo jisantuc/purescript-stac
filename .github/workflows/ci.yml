@@ -43,7 +43,7 @@ jobs:
               --github-repo jisantuc/purescript-stac \
               --github-pr ${PR_NUMBER} \
               --service Franklin-browser \
-              --port 9090
+              --filter "port 9090"
         env:
           KEY_ID: ${{ secrets.AKITA_API_KEY_ID }}
           KEY_SECRET: ${{ secrets.AKITA_API_KEY_SECRET }}
