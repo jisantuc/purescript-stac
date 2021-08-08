@@ -13,9 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Echo PR number
-        run: echo "PR number = ${{ github.event.pull_request.number }}"
-
       - name: Start services that tests depend on
         run: docker-compose -f docker-compose.test.yml up -d franklin database
 
@@ -40,7 +37,7 @@ jobs:
             --cidfile=akita-cid \
             akitasoftware/cli:latest learn \
               --github-repo ${GITHUB_REPOSITORY} \
-              --github-pr 18 \
+              --github-pr ${PR_NUMBER} \
               --github-commit ${GITHUB_SHA} \
               --github-branch ${GITHUB_HEAD_REF} \
               --service Franklin-browser \
@@ -48,7 +45,7 @@ jobs:
         env:
           KEY_ID: ${{ secrets.AKITA_API_KEY_ID }}
           KEY_SECRET: ${{ secrets.AKITA_API_KEY_SECRET }}
-          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
 
       - name: Set up a PureScript toolchain
         uses: purescript-contrib/setup-purescript@main
