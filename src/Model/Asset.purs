@@ -1,7 +1,7 @@
 module Model.Asset where
 
 import Data.Argonaut (class DecodeJson, class EncodeJson, Json, JsonDecodeError(..), decodeJson, encodeJson, stringify, toObject)
-import Data.Argonaut.Decode ((.:))
+import Data.Argonaut.Decode ((.:), (.:?))
 import Data.Argonaut.Encode ((:=), (~>))
 import Data.Either (Either(..))
 import Data.Foldable (elem)
@@ -48,7 +48,7 @@ instance decodeJsonAsset :: DecodeJson Asset where
           href <- obj .: "href"
           title <- obj .: "title"
           _type <- obj .: "type"
-          description <- obj .: "description"
+          description <- obj .:? "description"
           roles <- obj .: "roles"
           extensionFields <- filterKeys (\key -> not $ elem key fields) <$> decodeJson js
           in Asset { href, title, _type, description, roles, extensionFields }
