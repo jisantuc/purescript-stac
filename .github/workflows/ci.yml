@@ -55,6 +55,9 @@ jobs:
             --env CI=${CI} \
             --env AKITA_API_KEY_ID=${KEY_ID} \
             --env AKITA_API_KEY_SECRET=${KEY_SECRET} \
+            --github-branch=$(echo ${GITHUB_REF} | cut -c 12- ) \
+            --github-repo=${GITHUB_REPOSITORY} \
+            --github-commit=${GITHUB_SHA} \
             --net="container:purescript-stac_franklin_1" \
             --cidfile=akita-cid \
             akitasoftware/cli:latest learn \
