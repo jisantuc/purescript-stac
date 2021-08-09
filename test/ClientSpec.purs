@@ -30,33 +30,33 @@ spec = do
     it "fetch collections"
       $ getCollections stacHost
       >>= ( case _ of
-            Left err -> fail $ "Didn't decode response successfully" <> (printError err)
+            Left err -> fail $ "Didn't decode response successfully: " <> (printError err)
             Right (CollectionsResponse { collections }) -> collections `shouldSatisfy` (\x -> length x > 0)
         )
     it "fetch an individual collection"
       $ getCollection stacHost collectionId
       >>= ( case _ of
-            Left err -> fail $ "Didn't decode response successfully" <> (printError err)
+            Left err -> fail $ "Didn't decode response successfully: " <> (printError err)
             Right (Collection { id }) -> id `shouldEqual` "landsat-8-l1"
         )
     it "fetch collection items"
       $ getCollectionItems stacHost collectionId Nothing
       >>= ( case _ of
-            Left err -> fail $ "Didn't decode response successfully" <> (printError err)
+            Left err -> fail $ "Didn't decode response successfully: " <> (printError err)
             Right { features } -> length features `shouldSatisfy` (_ > 0)
         )
     it "fetch an individual collection item" $ getCollectionItem stacHost collectionId itemId
       >>= ( case _ of
-            Left err -> fail $ "Didn't decode response successfully" <> (printError err)
+            Left err -> fail $ "Didn't decode response successfully: " <> (printError err)
             Right (Item { id }) -> id `shouldEqual` (toString itemId)
         )
     it "fetch the landing page" $ getLandingPage stacHost
       >>= ( case _ of
-            Left err -> fail $ "Didn't decode response successfully" <> (printError err)
+            Left err -> fail $ "Didn't decode response successfully: " <> (printError err)
             Right (LandingPage { links }) -> length links `shouldSatisfy` (_ > 0)
         )
     it "fetch conformance" $ getConformance stacHost
       >>= ( case _ of
-            Left err -> fail $ "Didn't decode response successfully" <> (printError err)
+            Left err -> fail $ "Didn't decode response successfully: " <> (printError err)
             Right { conformsTo } -> length conformsTo `shouldSatisfy` (_ > 0)
         )
