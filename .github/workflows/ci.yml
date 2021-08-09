@@ -67,12 +67,6 @@ jobs:
           KEY_ID: ${{ secrets.AKITA_API_KEY_ID }}
           KEY_SECRET: ${{ secrets.AKITA_API_KEY_SECRET }}
 
-      - name: Echo github vars
-        run: |
-          echo ${GITHUB_REF} | cut -c 12- && \
-            echo $GITHUB_REPOSITORY && \
-            echo $GITHUB_SHA
-
       - name: Set up a PureScript toolchain
         uses: purescript-contrib/setup-purescript@main
         with:
