@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Collection item list supports the limit query parameter [#15](https://github.com/jisantuc/purescript-stac/pull/15) (@jisantuc)
 - Updated models for compatibility with spec version 1.0.0-rc2 [17](https://github.com/jisantuc/purescript-stac/pull/17) @jisantuc
 - Added client tests with a running Franklin server [#18](https://github.com/jisantuc/purescript-stac/pull/18)
+- Test core client methods [#23](https://github.com/jisantuc/purescript-stac/pull/23)
 
 ### Changed
 - Switched to spec discovery to separate client and serde tests [#18](https://github.com/jisantuc/purescript-stac/pull/18)
