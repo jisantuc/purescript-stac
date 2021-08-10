@@ -62,7 +62,9 @@ jobs:
               --github-repo=${GITHUB_REPOSITORY} \
               --github-commit=${GITHUB_SHA} \
               --service Franklin-browser \
-              --filter "port 9090"
+              --filter "port 9090" \
+              --tags x-akita-source=ci \
+              --versions stable
         env:
           KEY_ID: ${{ secrets.AKITA_API_KEY_ID }}
           KEY_SECRET: ${{ secrets.AKITA_API_KEY_SECRET }}
