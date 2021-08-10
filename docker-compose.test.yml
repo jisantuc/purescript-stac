@@ -15,7 +15,7 @@ services:
       retries: 3
     command: postgres -c log_statement=all
   franklin:
-    image: quay.io/azavea/franklin:909d8fb
+    image: quay.io/azavea/franklin:latest
     depends_on:
       - database
     command:
